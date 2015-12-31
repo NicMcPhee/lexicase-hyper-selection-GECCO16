@@ -1,6 +1,9 @@
 ## OSX
 .DS_STORE
 
+## Paper Specific
+hyperselection.pdf
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
