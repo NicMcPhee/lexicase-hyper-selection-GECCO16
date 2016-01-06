@@ -244,10 +244,9 @@ p(i) = \frac{(P-i+1)^t - (P-i)^t}{P^t}
 \end{equation}
 assuming no two individuals have the same fitness. With ties in the rankings, this equation does not hold exactly, but is approximately correct unless there are many tied individuals. We plot this probability mass function in Figure~\ref{fig:prob-selection-tourney-7}.
 
-\begin{figure}[t] %[t] sets the image at the top of the page; t = top, b = bottom, h = here%
-%\sidecaption[t]
+\begin{figure}[h] %[t] sets the image at the top of the page; t = top, b = bottom, h = here%
 \centering
-\includegraphics[width=5in]{probSelectionTourney7.pdf}
+\includegraphics[width=\linewidth]{probSelectionTourney7.pdf}
 \caption{Probability mass function of selecting individual with rank $i$ out of a population of 1000 individuals using tournament selection with tournament size 7, assuming no two individuals have the same rank. This plots Equation~\ref{tourneyProbEquation}.}
 \label{fig:prob-selection-tourney-7}
 \end{figure}
@@ -258,10 +257,10 @@ On the other hand, in Section~\ref{section:anecdote} we saw an example of lexica
 
 \begin{table}[t]
 \centering
-\caption{The average number of hyper-selected individuals at the 1\%, 5\%, and 10\% levels per generation for both lexicase selection and tournament selection.}
+\caption{NOTE: WE CAN PROBABLY REMOVE THIS TABLE AND JUST REFER TO THE FIRST 3 COLUMNS OF TABLE \ref{table:slt-hyper-selection} INSTEAD. The average number of hyper-selected individuals at the 1\%, 5\%, and 10\% levels per generation for both lexicase selection and tournament selection.}
 \label{table:hyper-selections}
 \rowcolors{3}{white}{Gray}
-\begin{tabular}{l | rrr | rrr}
+\begin{tabular}{p{1.8cm} | rrr | rrr}
 \toprule
   & \multicolumn{3}{c|}{\textbf{Lexicase}} & \multicolumn{3}{c}{\textbf{Tournament}} \\
 \textbf{Problem} & \textbf{1\%}  & \textbf{5\%}  & \textbf{10\%}  & \textbf{1\%}      & \textbf{5\%}      & \textbf{10\%}     \\
@@ -304,7 +303,7 @@ To test this hypothesis, we designed a new parent selection algorithm that selec
 SLT can be seen as a variation of tournament selection in which fitness is based on lexicase sampling instead of total error.
 SLT gives the highest probabilities of selection to those individuals that lexicase would select the most often in the population. But, since it uses tournaments for selection, its probability of selecting the individual ranked $i$ in the lexicase-sampled ranking will be same as in tournament selection, as given in Equation~\ref{tourneyProbEquation}. Therefore, we would expect the hyper-selection characteristics of SLT to mirror those of tournament selection, and differ only when the two behave differently with respect to tied individuals in the rankings, especially ties amongst the best individuals.
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
 \caption{The average number of hyper-selected individuals at the 1\%, 5\%, and 10\% levels per generation for lexicase selection, tournament selection and SLT selection. This table adds SLT to the results in Table~\ref{table:hyper-selections}.
 }
@@ -326,7 +325,7 @@ Negative To Zero           & 8.21  & 0.39 & 0.16 & 0.43 & 0.00 & 0.00 & 1.55 & 0
 Syllables                  & 5.74  & 0.13 & 0.05 & 0.38 & 0.00 & 0.00 & 1.55 & 0.00 & 0.00 \\
 \bottomrule
 \end{tabu}
-\end{table}
+\end{table*}
 
 We conducted 100 runs of PushGP \footnote{Due to a bug, an instruction equivalent to \texttt{exec_noop} was included in the instruction set for the runs using SLT. See Footnote~\ref{footnote:autoconstructive-rand-integer-bug} for more details on this bug.} using SLT on the same 9 benchmark problems from Table~\ref{table:hyper-selections}. We present the hyper-selection results for SLT, in addition to those for lexicase selection and tournament selection, in Table~\ref{table:slt-hyper-selection}. The first thing to note is that SLT has higher hyper-selection at the 1\% level than tournament selection. Theoretically, we would expect SLT to behave similarly to tournament selection if neither had ties in rank within the population. We believe the differences we see here are a product of ties in total error when using tournament selection, especially near the top of the rankings. The relative consistency of SLT's 1\%-level hyper-selection likely comes from the fact that it rarely had large numbers of tied individuals near the top of the rankings---we expect that tournament selection without ranking ties would also average around 1.55 hyper-selections at the 1\% level per generation.
 
@@ -337,12 +336,12 @@ Since we have shown that SLT has similar hyper-selection characteristics to tour
 
 \begin{table}[t]
 \centering
-\caption{Number of successful runs out of 100 for each setting on each problem. Lexicase selection and tournament selection results are same as those in Table~\ref{tableResults}.}
+\caption{Number of successful runs out of 100 for each setting on each problem.}
 \label{table:slt-results}
 \rowcolors{2}{Gray}{white}
 \begin{tabular}{lrrr}
 \toprule
-\textbf{Problem}                    & \textbf{Lexicase} & \textbf{Tournament} & \textbf{SLT} \\
+\textbf{Problem}                    & \textbf{Lex} & \textbf{Tourn} & \textbf{SLT} \\
 \midrule
 Double Letters             & 6        & 0          & 4   \\
 Replace Space with Newline & 51       & 8          & 61  \\
