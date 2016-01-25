@@ -45,7 +45,7 @@
 %
 % For tracking purposes - this is V2.0 - May 2012
 
-\documentclass{sig-alternate-05-2015}
+\documentclass{sig-alternate}
 
 \usepackage{longtable}
 \usepackage{tabu}
@@ -58,6 +58,8 @@
 \usepackage{booktabs}
 \usepackage[table]{xcolor}
 \definecolor{Gray}{gray}{0.9}
+
+\usepackage{todonotes}
 
 \newcommand{\definition}[1]{\textit{#1}}
 
@@ -94,7 +96,7 @@
 \widowpenalty = 10000
 % --- End of Author Metadata ---
 
-\title{Hyperselection Or Something}
+\title{Hyperselection and its impact on lexicase selection}
 %\subtitle{[Extended Abstract]}
 %
 % You need the command \numberofauthors to handle the 'placement
@@ -165,7 +167,10 @@ Author omitted\\
 
 \maketitle
 \begin{abstract}
-Abstract goes here.
+	It has been noted in previous work that lexicase selection, while extremely successful on a broad range of software synthesis problems, is occasionally quite aggressive in its selections. In extreme cases a single individual
+	can receive over 90\% of the selections in a particular generation. These kinds of \emph{hyperselections} are mathematical impossible when using many other selection methods such as tournament selection.
+	
+	Here we explore the frequency of hyperselections genetic programming runs using both tournament and lexicase selection, and document that hyperselections indeed occur using lexicase at levels impossible to achieve with tournament selection. We also examine the question of how important hyperselection is to the success of lexicase, and find that \emph{which} individuals are selected with lexicase is more important than selecting them many times over. The new \emph{sampled lexicase-tournament selection} mechanism is introduced, which chooses individuals from a pool similar to that selected by lexicase, but with frequencies similar to those when using tournament selection. We find that SLT performs comparably to lexicase on a collection of benchmark problems, and again far better than tournament.
 \end{abstract}
 
 
@@ -220,29 +225,29 @@ Abstract goes here.
 \keywords{Do we need keywords?}
 
 \section{Introduction}
+\label{section:introduction}
 
 Intro. Lexicase \cite{Helmuth:2014:ieeeTEC}.
 
+\todo[inline]{I've yanked the following content from other parts of the initial copy/paste draft because it seemed like they made more sense in the intro. - Nic}
 
-%-----------------------------------------------------------
-%@@
-% REVISED
-\section{Exploitation}
-\label{section:exploitation}
+Evolutionary algorithms use selection pressure to direct search, with the goal of refining promising programs into better ones. This exploitation of already-discovered individuals helps drive search toward solutions. Almost all parent selection mechanisms select some individuals more than others, but vary in how they bias selection.\footnote{An exception is uniform selection, which does not bias selection.}
 
-Evolutionary algorithms use selection pressure to direct search, with the goal of refining promising programs into better ones. This exploitation of already-discovered individuals helps drive search toward solutions. All parent selection mechanisms select some individuals more than others, but vary in how they bias selection. The lone exception is uniform selection, which does not bias selection; in our performance trials in Section~\ref{sectionPerformanceResults}, it unsurprisingly performed very poorly.
+In previous work~\cite{Helmuth:2015:GPTP,Helmuth:2015:dissertation} we noted that lexicase selection~\cite{Helmuth:2014:ieeeTEC} often gave many parent selections to single individuals, including some individuals that fell quite low in rankings based on total error. This extreme exploitation of specific individuals strongly contrasts to how often we would expect tournament selection to select any individual, let alone one with poor total error. In this paper, we will systematically investigate the hyper-selection of single individuals in GP using lexicase selection.
 
-In Section~\ref{section:anecdote} we noted some interesting behaviors of lexicase selection, in particular that it often seemed to give many parent selections to single individuals, including some individuals that fell quite low in rankings based on total error. This extreme exploitation of specific individuals strongly contrasts to how often we would expect tournament selection to select any individual, let alone one with poor total error. In this section, we will systematically investigate the hyper-selection of single individuals in GP using lexicase selection.
 
-Let us call an individual \definition{hyper-selected at the $X\%$ level} if that individual receives at least $X\%$ of the parent selections in a single generation. For example, an individual that receives at least 170 selections out of 1700 total in a generation is considered hyper-selected at the 10\% level (as well as any level below 10\%). Examining hyper-selection events can help us characterize how often single individuals receive a large percent of the selection pressure in their generations; here, we will %(somewhat arbitrarily) 
+\section{Hyperselection}
+\label{section:hyperselection}
+
+Let us call an individual \definition{hyper-selected at the $X\%$ level} if that individual receives at least $X\%$ of the parent selections in a single generation. For example, an individual that receives at least 170 selections out of 1700 total in a generation is considered hyper-selected at the 10\% level (as well as any level below 10\%). Examining hyper-selection events can help us characterize how often single individuals receive a large percent of the selections in their generations; here, we will %(somewhat arbitrarily) 
 look at hyper-selection events at the 1\%, 5\%, and 10\% levels.
 
 With tournament selection, the number of times an individual can be selected is limited by the number of tournaments in which it participates. If the best member of the population participates in 1\% of the tournaments for a given generation, it will be selected 1\% of the time that generation, but no more.
- Since the expected number of tournaments in which each individual participates is constant for a particular population size $P$ and tournament size $t$, the probability of an individual being selected by tournament selection is entirely determined by its rank in the population. In particular, B\"ack \cite{350042, Blickle:1995:MAT:645514.658088} shows that the probability of selecting an individual with rank $i \in [1,P]$, with $i = 1$ being the best rank, is
+ Since the expected number of tournaments in which each individual participates is constant for a particular population size $P$ and tournament size $t$, the probability of an individual being selected by tournament selection is entirely determined by its rank in the population. In particular, the probability of selecting an individual with rank $i \in [1,P]$, with $i = 1$ being the best rank, is
 \begin{equation}\label{tourneyProbEquation}
 p(i) = \frac{(P-i+1)^t - (P-i)^t}{P^t}
 \end{equation}
-assuming no two individuals have the same fitness. With ties in the rankings, this equation does not hold exactly, but is approximately correct unless there are many tied individuals. We plot this probability mass function in Figure~\ref{fig:prob-selection-tourney-7}.
+assuming no two individuals have the same fitness~\cite{350042, Blickle:1995:MAT:645514.658088}. With ties in the rankings, this equation does not hold exactly, but is approximately correct unless there are many tied individuals. We plot this probability mass function in Figure~\ref{fig:prob-selection-tourney-7}.
 
 \begin{figure}[h] %[t] sets the image at the top of the page; t = top, b = bottom, h = here%
 \centering
@@ -251,42 +256,55 @@ assuming no two individuals have the same fitness. With ties in the rankings, th
 \label{fig:prob-selection-tourney-7}
 \end{figure}
 
+\todo[inline]{We have data on the claim below about individuals receiving over 90\% of the selections, but there's nothing in the current draft of this paper. Do we want something concrete, or just leave it like this?} 
+
 From Equation~\ref{tourneyProbEquation}, we see that in our runs using population size 1000 and tournament size 7, the best few individuals will be selected approximately 0.7\% of the time each. This also follows from the fact that every individual will participate in approximately 0.7\% of the tournaments, and the best individual will win each tournament in which it participates.
 With tournament selection it would therefore be unlikely to hyper-select many individuals at the 1\% level in a generation, and extremely unlikely for any individuals to be hyper selected at the 5\% or 10\% level.
-On the other hand, in Section~\ref{section:anecdote} we saw an example of lexicase selection rewarding an interesting individual with over 90\% of the selections in a generation. We therefore expect lexicase selection to produce non-zero numbers of hyper-selections at the 5\% and 10\% levels, though without empirical data it is unclear how common these will be.
+On the other hand, we have observed numerous examples of lexicase selection rewarding an interesting individual with over 90\% of the selections in a generation. We therefore expect lexicase selection to produce non-zero numbers of hyper-selections at the 5\% and 10\% levels, though without empirical data it is unclear how common these will be.
 
-\begin{table}[t]
-\centering
-\caption{NOTE: WE CAN PROBABLY REMOVE THIS TABLE AND JUST REFER TO THE FIRST 3 COLUMNS OF TABLE \ref{table:slt-hyper-selection} INSTEAD. The average number of hyper-selected individuals at the 1\%, 5\%, and 10\% levels per generation for both lexicase selection and tournament selection.}
-\label{table:hyper-selections}
-\rowcolors{3}{white}{Gray}
-\begin{tabular}{p{1.8cm} | rrr | rrr}
-\toprule
-  & \multicolumn{3}{c|}{\textbf{Lexicase}} & \multicolumn{3}{c}{\textbf{Tournament}} \\
-\textbf{Problem} & \textbf{1\%}  & \textbf{5\%}  & \textbf{10\%}  & \textbf{1\%}      & \textbf{5\%}      & \textbf{10\%}     \\
-\midrule
-Double Letters             & 12.28 & 0.29 & 0.09 & 0.36 & 0.00 & 0.00 \\
-Replace Space with Newline & 13.39 & 0.38 & 0.11 & 0.28 & 0.00 & 0.00 \\
-String Lengths Backwards   & 6.21  & 0.54 & 0.25 & 0.42 & 0.00 & 0.00 \\
-Vector Average             & 6.99  & 0.02 & 0.01 & 0.91 & 0.00 & 0.00 \\
-Count Odds                 & 0.49  & 0.02 & 0.00 & 0.70 & 0.00 & 0.00 \\
-Mirror Image               & 9.72  & 0.23 & 0.05 & 0.22 & 0.00 & 0.00 \\
-X-Word Lines               & 5.31  & 0.13 & 0.04 & 0.36 & 0.00 & 0.00 \\
-Negative To Zero           & 8.21  & 0.39 & 0.16 & 0.43 & 0.00 & 0.00 \\
-Syllables                  & 5.74  & 0.13 & 0.05 & 0.38 & 0.00 & 0.00 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\section{Experimental setup}
+\label{section:experiments}
 
-To measure hyper-selection, we gathered data from using lexicase selection and tournament selection with size 7 tournaments on nine benchmark problems, a subset chosen to exhibit a range of problem requirements and difficulties\footnote{\label{footnote:autoconstructive-rand-integer-bug}Due to a bug, an instruction equivalent to \texttt{exec_noop} was included in the instruction set for the runs on the problems Count Odds, Mirror Image, Vector Average, Double Letters, String Lengths Backwards, and X-Word Lines. We believe that this has a negligible to zero effect on our results. This instruction does nothing when evaluated, simply leaving the stack states unchanged. The instruction \texttt{exec_noop} already appeared in each instruction set once, so this simply added a second equivalent instruction. Additionally, the instruction sets we used always have 50 or more instructions, and usually more than 100 (see Table~\ref{tableDataTypes}). Such large instruction sets dilute the importance of a single instruction, especially one that does nothing.}.
-We then calculated the average number of hyper-selected individuals at the 1\%, 5\%, and 10\% levels per generation, which we present in Table~\ref{table:hyper-selections}. On all problems except one, lexicase selection hyper-selects 5 or more individuals per generation on average at the 1\% level; tournament selection averages less than one per generation on all problems, though always greater than 0.2. Unsurprisingly, tournament selection never hyper-selected an individual at the 5\% or 10\% levels.
-On 7 of the 9 problems, lexicase selection hyper-selected one individual at the 5\% level in every 2 to 10 generations on average, and one individual at the 10\% level every 4 to 25 generations on average. The two problems Vector Average and Count Odds showed much lower levels of hyper-selection with lexicase selection, indicating that selecting a single individual to parent many of the children in a single generation was rarer on those problems. These two problems were also among the least-solved problems in this subset of the benchmark problems; one hypothesis is that most of the GP runs had trouble getting any traction on these problems, leading to more homogeneous populations and fewer hyper-selection events than on other problems.
+%\begin{table}[t]
+%\centering
+%\caption{NOTE: WE CAN PROBABLY REMOVE THIS TABLE AND JUST REFER TO THE FIRST 3 COLUMNS OF TABLE \ref{table:slt-hyper-selection} INSTEAD. The average number of hyper-selected individuals at the 1\%, 5\%, and 10\% levels per generation for both lexicase selection and tournament selection.}
+%\label{table:hyper-selections}
+%\rowcolors{3}{white}{Gray}
+%\begin{tabular}{p{1.8cm} | rrr | rrr}
+%\toprule
+%  & \multicolumn{3}{c|}{\textbf{Lexicase}} & \multicolumn{3}{c}{\textbf{Tournament}} \\
+%\textbf{Problem} & \textbf{1\%}  & \textbf{5\%}  & \textbf{10\%}  & \textbf{1\%}      & \textbf{5\%}      & \textbf{10\%}     \\
+%\midrule
+%Double Letters             & 12.28 & 0.29 & 0.09 & 0.36 & 0.00 & 0.00 \\
+%Replace Space with Newline & 13.39 & 0.38 & 0.11 & 0.28 & 0.00 & 0.00 \\
+%String Lengths Backwards   & 6.21  & 0.54 & 0.25 & 0.42 & 0.00 & 0.00 \\
+%Vector Average             & 6.99  & 0.02 & 0.01 & 0.91 & 0.00 & 0.00 \\
+%Count Odds                 & 0.49  & 0.02 & 0.00 & 0.70 & 0.00 & 0.00 \\
+%Mirror Image               & 9.72  & 0.23 & 0.05 & 0.22 & 0.00 & 0.00 \\
+%X-Word Lines               & 5.31  & 0.13 & 0.04 & 0.36 & 0.00 & 0.00 \\
+%Negative To Zero           & 8.21  & 0.39 & 0.16 & 0.43 & 0.00 & 0.00 \\
+%Syllables                  & 5.74  & 0.13 & 0.05 & 0.38 & 0.00 & 0.00 \\
+%\bottomrule
+%\end{tabular}
+%\end{table}
 
-Considering that tournament selection conforms to the probability of selection given in Equation~\ref{tourneyProbEquation} regardless of problem, it is at first surprising that its hyper-selections at the 1\% level vary as much as they do across problems. This difference is likely explained by how often tied individuals appear near the top of the rankings for different problems, since ties make Equation~\ref{tourneyProbEquation} not strictly hold. Intuitively, if many individuals tie for the best rank, they will each win fewer tournaments than a single best individual would, since ties in tournaments are broken randomly. Therefore, lower hyper-selection for tournament selection on a problem likely indicates that ties happened more often on those problems, which we have observed anecdotally in a few runs.
+\todo[inline]{I'd be sorely tempted to drop the ``bug'' footnote below, or at least shorten the heck out of it. -- Nic}
 
-We do not present hyper-selection results for our runs using IFS selection here. In fact, without ties, we would expect IFS to give identical results to tournament selection. IFS is a variation on tournament selection where the fitness of individuals weights some test cases more heavily than others; it then uses tournament selection over the weighted fitnesses. Even though the ranking of individuals is different than when simply using total error, the probability of selecting the individual ranked $i$ still follows Equation~\ref{tourneyProbEquation}. Therefore, hyper-selection results using IFS should be very close to tournament selection, only differing when the two methods produce different numbers of tied individuals.
+\todo[inline]{It's possible that lack of hyperselection is generally higher in successful runs. Can we easily split the numbers according to whether a run was successful or not? -- Nic}
 
-The results in Table~\ref{table:hyper-selections} clearly show that lexicase selection gives more of its parent selections to single individuals than tournament selection, both at low levels (1\%) and higher levels (5\% and 10\%) of hyper-selection. This indicates that lexicase selection more often concentrates its selection pressure on single individuals or small groups of individuals than tournament selection, increasing its exploitation of the individuals it selects most often. This data does not indicate whether lexicase selection is hyper-selecting the same individuals that tournament selection ranks highest (those with best total error), or if it actually selects individuals that would receive few or no selections with tournament selection.
+To measure hyper-selection, we gathered data from using lexicase selection and tournament selection with size 7 tournaments on nine benchmark problems from~\cite{Helmuth:2015:GECCO, Helmuth:2015:dissertation}, a subset chosen to exhibit a range of problem requirements and difficulties\footnote{\label{footnote:autoconstructive-rand-integer-bug}Due to a bug, an instruction equivalent to \texttt{exec_noop} was included in the instruction set for the runs on the problems Count Odds, Mirror Image, Vector Average, Double Letters, String Lengths Backwards, and X-Word Lines. We believe that this has a negligible to zero effect on our results. This instruction does nothing when evaluated, simply leaving the stack states unchanged. The instruction \texttt{exec_noop} already appeared in each instruction set once, so this simply added a second equivalent instruction. Additionally, the instruction sets we used always have 50 or more instructions, and usually more than 100 (see~\cite{Helmuth:2015:GECCO} for details). Such large instruction sets dilute the importance of a single instruction, especially one that does nothing.}.
+We then calculated the average number of hyper-selected individuals at the 1\%, 5\%, and 10\% levels per generation, which we present in Table~\ref{table:slt-hyper-selection}. On all problems except one, lexicase selection hyper-selects 5 or more individuals per generation on average at the 1\% level; tournament selection averages less than one per generation on all problems, though always greater than 0.2. Unsurprisingly, tournament selection never hyper-selected an individual at the 5\% or 10\% levels.
+On 7 of the 9 problems, lexicase selection hyper-selected one individual at the 5\% level in every 2 to 10 generations on average, and one individual at the 10\% level every 4 to 25 generations on average. 
+
+The Vector Average and Count Odds problems showed much lower levels of hyper-selection with lexicase selection, especially at the 5\% and 10\% levels, indicating that selecting a single individual to parent many of the children in a single generation was rarer on those problems. These two problems were also among the least-solved problems in this subset of the benchmark problems; one hypothesis is that most of the GP runs had trouble getting any traction on these problems, leading to more homogeneous populations and fewer hyper-selection events than on other problems.
+
+\todo[inline]{We could probably check the hypothesis in the last sentence if we wanted to.}
+
+Considering that tournament selection conforms to the probability of selection given in Equation~\ref{tourneyProbEquation} regardless of problem, it is at first surprising that its hyper-selections at the 1\% level vary as much as they do across problems. This difference is likely explained by how often tied individuals appear near the top of the rankings for different problems, since Equation~\ref{tourneyProbEquation} does not strictly hold in the presence of ties. Intuitively, if many individuals tie for the best rank, they will each win fewer tournaments than a single best individual would, since ties in tournaments are broken randomly. Therefore, lower hyper-selection for tournament selection on a problem likely indicates that ties happened more often on those problems, which we have observed anecdotally in a few runs.
+
+\todo[inline]{We could probably get data on the question in the last sentence if we wanted to.}
+
+The results in Table~\ref{table:slt-hyper-selection} clearly show that lexicase selection gives more of its parent selections to single individuals than tournament selection, both at low levels (1\%) and higher levels (5\% and 10\%) of hyper-selection. This indicates that lexicase selection more often concentrates its selection pressure on single individuals or small groups of individuals than tournament selection, increasing its exploitation of the individuals it selects most often. This data does not indicate whether lexicase selection is hyper-selecting the same individuals that tournament selection ranks highest (those with best total error), or if it actually selects individuals that would receive few or no selections with tournament selection.
 
 We have previously noted lexicase selection outperforming tournament selection across many benchmark problems, and now observe that it often concentrates selection pressure into small numbers of individuals. This raises important questions: can we attribute lexicase selection's success to its ability to concentrate selection in hyper-selection events? Or, is it more important that lexicase selects different individuals than tournament selection, in some sense the ``right'' individuals to drive evolution toward a solution? We will investigate these questions in Section~\ref{section:HyperSelectionandLexicasePerformance}.
 
@@ -296,16 +314,19 @@ We have previously noted lexicase selection outperforming tournament selection a
 \section{Hyper-Selection and Lexicase Performance}
 \label{section:HyperSelectionandLexicasePerformance}
 
-In Section~\ref{section:exploitation} we saw that lexicase selection often ends up selecting the same individual many times in one generation, much more often than tournament selection does. This leads to the question of whether the hyper-selections observed in lexicase selection runs are important in driving evolution toward solutions, or if they are simply a side effect of lexicase's algorithm. The alternative is that the individuals that lexicase selection selects the most often are simply different from those that tournament selection selects most often, in particular those with poor total error. In this section we test the hypothesis that the hyper-selections we observed in runs using lexicase are integral to its success, and that without these extreme exploitative events, lexicase selection would perform significantly worse than it does with them.
+In Section~\ref{section:introduction} we saw that lexicase selection often ends up selecting the same individual many times in one generation, much more often than tournament selection does. This leads to the question of whether the hyper-selections observed in lexicase selection runs are important in driving evolution toward solutions, or if they are simply a side effect of lexicase's algorithm. The alternative is that the individuals that lexicase selection selects the most often are simply different from those that tournament selection selects most often, in particular those with poor total error. In this section we test the hypothesis that the hyper-selections we observed in runs using lexicase are integral to its success, and that without these extreme exploitative events, lexicase selection would perform significantly worse than it does with them.
 
 To test this hypothesis, we designed a new parent selection algorithm that selects the same individuals most often that lexicase does, but has hyper-selection characteristics much closer to tournament selection. The new algorithm, \definition{sampled lexicase-tournament selection} (SLT), starts by sampling the population, which only happens once per generation before selecting any parents. We sample $k$ individuals from the population by running the lexicase selection algorithm and tracking how often each individual is selected. In this work we set $k = 2P$, where $P$ is the population size (set to 1000 in our runs), guaranteeing at least as many samples as the number of parents that will be selected in that generation\footnote{We observe around 1700 parent selections per generation on average, which varies since we randomly select genetic operators, and some operators require one parent where others require two. This means that at most, 2000 parents could be selected in a generation.}. We then use the number of samples each individual received to rank the population from best (most samples) to worst (least samples). Next, every time we need to select a parent, we conduct a tournament, where the winner of the tournament is based on the lexicase-sampled ranking instead of total error. In this experiment we used size 7 tournaments, just like we did with tournament selection and IFS in our experiments.
 
 SLT can be seen as a variation of tournament selection in which fitness is based on lexicase sampling instead of total error.
 SLT gives the highest probabilities of selection to those individuals that lexicase would select the most often in the population. But, since it uses tournaments for selection, its probability of selecting the individual ranked $i$ in the lexicase-sampled ranking will be same as in tournament selection, as given in Equation~\ref{tourneyProbEquation}. Therefore, we would expect the hyper-selection characteristics of SLT to mirror those of tournament selection, and differ only when the two behave differently with respect to tied individuals in the rankings, especially ties amongst the best individuals.
 
+\todo[inline]{Would it be OK if I alphabetized the list of problems in Tables 1 and 2?}
+
 \begin{table*}[t]
 \centering
-\caption{The average number of hyper-selected individuals at the 1\%, 5\%, and 10\% levels per generation for lexicase selection, tournament selection and SLT selection. This table adds SLT to the results in Table~\ref{table:hyper-selections}.
+\caption{
+	The average number of hyper-selected individuals at the 1\%, 5\%, and 10\% levels per generation for lexicase selection, tournament selection and SLT selection.
 }
 \label{table:slt-hyper-selection}
 \rowcolors{3}{white}{Gray}
@@ -327,7 +348,7 @@ Syllables                  & 5.74  & 0.13 & 0.05 & 0.38 & 0.00 & 0.00 & 1.55 & 0
 \end{tabu}
 \end{table*}
 
-We conducted 100 runs of PushGP \footnote{Due to a bug, an instruction equivalent to \texttt{exec_noop} was included in the instruction set for the runs using SLT. See Footnote~\ref{footnote:autoconstructive-rand-integer-bug} for more details on this bug.} using SLT on the same 9 benchmark problems from Table~\ref{table:hyper-selections}. We present the hyper-selection results for SLT, in addition to those for lexicase selection and tournament selection, in Table~\ref{table:slt-hyper-selection}. The first thing to note is that SLT has higher hyper-selection at the 1\% level than tournament selection. Theoretically, we would expect SLT to behave similarly to tournament selection if neither had ties in rank within the population. We believe the differences we see here are a product of ties in total error when using tournament selection, especially near the top of the rankings. The relative consistency of SLT's 1\%-level hyper-selection likely comes from the fact that it rarely had large numbers of tied individuals near the top of the rankings---we expect that tournament selection without ranking ties would also average around 1.55 hyper-selections at the 1\% level per generation.
+We conducted 100 runs of PushGP using SLT on the same 9 benchmark problems; the hyper-selection results for SLT are also included in Table~\ref{table:slt-hyper-selection}. The first thing to note is that SLT has higher hyper-selection at the 1\% level than tournament selection. Theoretically, we would expect SLT to behave similarly to tournament selection if neither had ties in rank within the population. We believe the differences we see here are a product of ties in total error when using tournament selection, especially near the top of the rankings. The relative consistency of SLT's 1\%-level hyper-selection likely comes from the fact that it rarely had large numbers of tied individuals near the top of the rankings---we expect that tournament selection without ranking ties would also average around 1.55 hyper-selections at the 1\% level per generation.
 
 In these runs, SLT usually had lower hyper-selection at the 1\% level than lexicase selection, and always lower at the 5\% and 10\% levels, on which it never had a non-zero result. Since SLT was designed to have similar hyper-selection characteristics as tournament selection, it is unsurprising that it received no hyper-selections at the upper levels. This means that SLT succeeds in our goal of creating a lexicase-based selection mechanism that never puts as much as 5\% of the parent selections in a generation on a single individual. This contrasts with lexicase selection, which often selects single individuals to make large numbers of the children for the next generation.
 
@@ -356,6 +377,7 @@ Syllables                  & 18       & 1          & 13  \\
 \end{tabular}
 \end{table}
 
+\todo[inline]{Should we just drop this next paragraph? -- Nic}
 We plotted the diversity across generations from the runs using SLT, as we did for other techniques in Section~\ref{section:exploration}. Interestingly, the diversity plots for SLT were virtually indistinguishable from those of lexicase selection, so we omit them here. Thus, even though the techniques produce significantly different hyper-selection rates, their populations still maintain similar abilities to search widely.
 
 These results show that even though SLT has much lower hyper-selection characteristics than lexicase selection, never selecting a single individual to parent more than 5\% of the children in a generation, it nevertheless maintains the problem-solving performance shown by lexicase selection. These results give strong evidence against the hypothesis that lexicase selection's increased exploitation of hyper-selected individuals is important in its ability to outperform tournament selection and IFS. Instead, this suggests that it is more important \textit{which} individuals lexicase selection selects most often, which it has in common with SLT but not tournament selection.
