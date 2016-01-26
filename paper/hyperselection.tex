@@ -96,7 +96,8 @@
 \widowpenalty = 10000
 % --- End of Author Metadata ---
 
-\title{Hyperselection and its impact on lexicase selection}
+\title{The Impact of Hyperselection on Lexicase Selection}
+
 %\subtitle{[Extended Abstract]}
 %
 % You need the command \numberofauthors to handle the 'placement
@@ -167,10 +168,12 @@ Author omitted\\
 
 \maketitle
 \begin{abstract}
+
 	It has been noted in previous work that lexicase selection, while extremely successful on a broad range of software synthesis problems, is occasionally quite aggressive in its selections. In extreme cases a single individual
-	can receive over 90\% of the selections in a particular generation. These kinds of \emph{hyperselections} are mathematical impossible when using many other selection methods such as tournament selection.
+	can receive over 90\% of the selections in a particular generation. These kinds of \emph{hyperselections} are mathematically impossible when using many other selection methods such as tournament selection.
 	
-	Here we explore the frequency of hyperselections genetic programming runs using both tournament and lexicase selection, and document that hyperselections indeed occur using lexicase at levels impossible to achieve with tournament selection. We also examine the question of how important hyperselection is to the success of lexicase, and find that \emph{which} individuals are selected with lexicase is more important than selecting them many times over. The new \emph{sampled lexicase-tournament selection} mechanism is introduced, which chooses individuals from a pool similar to that selected by lexicase, but with frequencies similar to those when using tournament selection. We find that SLT performs comparably to lexicase on a collection of benchmark problems, and again far better than tournament.
+	Here we explore the frequency of hyperselections in genetic programming runs using both tournament and lexicase selection, and document that hyperselections indeed occur using lexicase selection at levels impossible to achieve with tournament selection. The new \emph{sampled lexicase-tournament selection} mechanism is introduced, which chooses individuals from a pool similar to that selected by lexicase, but with frequencies similar to those when using tournament selection. We find that sampled lexicase-tournament selection performs comparably to lexicase selection on a collection of benchmark problems, and again far better than tournament. This finding indicates that hyperselection is not critical to the success of lexicase selection, and instead that it is more important \textit{which} individuals lexicase selects rather than how often they are selected.
+
 \end{abstract}
 
 
