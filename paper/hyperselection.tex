@@ -380,7 +380,7 @@ Syllables                  & 18       & 1          & 13  \\
 \end{tabular}
 \end{table}
 
-\todo[inline]{Should we just drop this next paragraph? -- Nic}
+\todo[inline]{Should we just drop this next paragraph? -- Nic\\ Tom: I don't think so -- I think it's worth mentioning that the diversity is similar. If it were different, it could be a reason to prefer one or the other even though it didn't affect success rates on these problems, since different diversity might be important on other problems. In fact, if we have room, it might be worthwhile to insert one or two diversity plots here.}
 We plotted the diversity across generations from the runs using SLT, as we did for other techniques in Section~\ref{section:exploration}. Interestingly, the diversity plots for SLT were virtually indistinguishable from those of lexicase selection, so we omit them here. Thus, even though the techniques produce significantly different hyper-selection rates, their populations still maintain similar abilities to search widely.
 
 These results show that even though SLT has much lower hyper-selection characteristics than lexicase selection, never selecting a single individual to parent more than 5\% of the children in a generation, it nevertheless maintains the problem-solving performance shown by lexicase selection. These results give strong evidence against the hypothesis that lexicase selection's increased exploitation of hyper-selected individuals is important in its ability to outperform tournament selection and IFS. Instead, this suggests that it is more important \textit{which} individuals lexicase selection selects most often, which it has in common with SLT but not tournament selection.
@@ -390,7 +390,10 @@ While SLT achieved similar performance to lexicase selection in this experiment,
 
 \section{Conclusions}
 
-The results presented here suggest that while the hyper-selection events caused by lexicase selection do not impact the problem solving performance, they do happen with some frequency. One might speculate that hyper-selection could result in significantly decreased population diversity. \todo[inline]{Have we observed differences in diversity? I forget. Say something about them being worth future study. Additionally, it seems that lexicase selection might be good at rediversifying the population after a hyper-selection event.}\todo[inline]{Here's a note I had about the above: Look at the hyper-selected individuals, and what happens to the
+The results presented here suggest that while the hyper-selection events caused by lexicase selection do not impact the problem solving performance, they do happen with some frequency. One might speculate that hyper-selection could result in significantly decreased population diversity.
+
+\todo[inline]{Tom: Have we observed differences in diversity? I forget. Say something about them being worth future study. Additionally, it seems that lexicase selection might be good at rediversifying the population after a hyper-selection event.}
+\todo[inline]{Tom: Here's a note I had about the above: Look at the hyper-selected individuals, and what happens to the
 population diversity in the first few generations afterward an
 uber-hyper-selection event. I think in run6 we saw rapid increases in
 diversity after a valley, which would be interesting if that's the rule
