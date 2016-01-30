@@ -252,7 +252,7 @@ p(i) = \frac{(P-i+1)^t - (P-i)^t}{P^t}
 \end{equation}
 assuming no two individuals have the same fitness~\cite{350042, Blickle:1995:MAT:645514.658088}. With ties in the rankings, this equation does not hold exactly, but is approximately correct unless there are many tied individuals. We plot this probability mass function in Figure~\ref{fig:prob-selection-tourney-7}.
 
-\begin{figure}[h] %[t] sets the image at the top of the page; t = top, b = bottom, h = here%
+\begin{figure}[t] %[t] sets the image at the top of the page; t = top, b = bottom, h = here%
 \centering
 \includegraphics[width=\linewidth]{probSelectionTourney7.pdf}
 \caption{Probability mass function of selecting individual with rank $i$ out of a population of 1000 individuals using tournament selection with tournament size 7, assuming no two individuals have the same rank. This plots Equation~\ref{tourneyProbEquation}.}
@@ -296,7 +296,7 @@ On the other hand, we have observed numerous examples of lexicase selection rewa
 \todo[inline]{It's possible that lack of hyperselection is generally higher in successful runs. Can we easily split the numbers according to whether a run was successful or not? -- Nic}
 
 To measure hyper-selection, we gathered data from using lexicase selection and tournament selection with size 7 tournaments on nine benchmark problems from~\cite{Helmuth:2015:GECCO, Helmuth:2015:dissertation}, a subset chosen to exhibit a range of problem requirements and difficulties\footnote{\label{footnote:autoconstructive-rand-integer-bug}Due to a bug, an instruction equivalent to \texttt{exec_noop} was included in the instruction set for the runs on the problems Count Odds, Mirror Image, Vector Average, Double Letters, String Lengths Backwards, and X-Word Lines. We believe that this has a negligible to zero effect on our results. This instruction does nothing when evaluated, simply leaving the stack states unchanged. The instruction \texttt{exec_noop} already appeared in each instruction set once, so this simply added a second equivalent instruction. Additionally, the instruction sets we used always have 50 or more instructions, and usually more than 100 (see~\cite{Helmuth:2015:GECCO} for details). Such large instruction sets dilute the importance of a single instruction, especially one that does nothing.}.
-We then calculated the average number of hyper-selected individuals at the 1\%, 5\%, and 10\% levels per generation, which we present in Table~\ref{table:slt-hyper-selection}. On all problems except one, lexicase selection hyper-selects 5 or more individuals per generation on average at the 1\% level; tournament selection averages less than one per generation on all problems, though always greater than 0.2. Unsurprisingly, tournament selection never hyper-selected an individual at the 5\% or 10\% levels.
+We then calculated the average number of hyper-selected individuals at the 1\%, 5\%, and 10\% levels per generation, which we present in the first three major columns of Table~\ref{table:slt-hyper-selection}. On all problems except one, lexicase selection hyper-selects 5 or more individuals per generation on average at the 1\% level; tournament selection averages less than one per generation on all problems, though always greater than 0.2. Unsurprisingly, tournament selection never hyper-selected an individual at the 5\% or 10\% levels.
 On 7 of the 9 problems, lexicase selection hyper-selected one individual at the 5\% level in every 2 to 10 generations on average, and one individual at the 10\% level every 4 to 25 generations on average. 
 
 The Vector Average and Count Odds problems showed much lower levels of hyper-selection with lexicase selection, especially at the 5\% and 10\% levels, indicating that selecting a single individual to parent many of the children in a single generation was rarer on those problems. These two problems were also among the least-solved problems in this subset of the benchmark problems; one hypothesis is that most of the GP runs had trouble getting any traction on these problems, leading to more homogeneous populations and fewer hyper-selection events than on other problems.
@@ -333,7 +333,7 @@ SLT gives the highest probabilities of selection to those individuals that lexic
 }
 \label{table:slt-hyper-selection}
 \rowcolors{3}{white}{Gray}
-\begin{tabu} to \textwidth {X[1,l] | rrr | rrr | rrr}
+\begin{tabu} to \textwidth {l | rrr | rrr | rrr}
 \toprule
   & \multicolumn{3}{c|}{\textbf{Lexicase}} & \multicolumn{3}{c|}{\textbf{Tournament}} & \multicolumn{3}{c}{\textbf{SLT}} \\
 \textbf{Problem} & \textbf{1\%}  & \textbf{5\%}  & \textbf{10\%}  & \textbf{1\%}      & \textbf{5\%}      & \textbf{10\%}   & \textbf{1\%}      & \textbf{5\%}      & \textbf{10\%}  \\
