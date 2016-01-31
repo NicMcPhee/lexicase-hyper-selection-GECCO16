@@ -247,10 +247,50 @@ In the following section (Section \ref{section:lexicase}), we  describe the lexi
 
 
 
-\section{Lexicase selection}
+\section{Lexicase Selection}
 \label{section:lexicase}
 
 \todo[inline]{Also, this is where some other selection methods should be briefly mentioned, with citations, so we're not dinged for neglecting related work, but then we say: Because the aim of this paper is only to investigate the relationship between hyperselection and lexicase selection, and not to compare lexicase selection to other selection methods, further discussion of alternate selection methods is outside the scope of this paper.}
+
+%- no verbatim copying (besides dissertation)
+
+In a population-based stochastic search algorithm such as GP, lexicase\footnote{The term ``lexicase'' has been used previously in unrelated work \cite{Starosta:1986:LPL:991365.991400, starosta1988case}.} selection provides a method for selecting individuals to serve as parents of new individuals. As a behavior-based search driver \cite{Krawiec:2015:GPTP}, it can be used any time that potential parents are assessed with respect to multiple test cases.
+
+
+
+%- algorithm
+
+\begin{figure}%[!t]
+\centering
+\fbox{\parbox{\linewidth}{To select one parent program for use in a genetic operation:
+\begin{enumerate}
+\item {\ttfamily Initialize}:
+\begin{enumerate}
+\item Set {\ttfamily candidates} to be the entire population.
+\item Set {\ttfamily cases} to be a list of all of the test cases in the training set in random order.
+\end{enumerate}
+\item {\ttfamily Loop}:
+\begin{enumerate}
+\item Set {\ttfamily best} to be the best performance of any individual currently in {\ttfamily candidates} for the first case in {\ttfamily cases}.
+\item Set {\ttfamily candidates} to be the subset of the current {\ttfamily candidates} that have exactly {\ttfamily best} performance on the first case in {\ttfamily cases}.
+\item If {\ttfamily candidates} contains just a single individual then return it.
+\item If {\ttfamily cases} contains just a single test case then return a randomly selected individual from {\ttfamily candidates}.
+\item Otherwise remove the first case from {\ttfamily cases} and go to {\ttfamily Loop}.
+\end{enumerate}
+\end{enumerate}
+}}
+\caption{\label{lexicase}Pseudocode for the lexicase selection algorithm.}
+\end{figure}
+
+%- characteristics (brief)
+
+
+%- cite previous results
+% - performance results
+
+We have previously shown that lexicase selection can effectively increase performance while also increasing behavioral diversity on a variety of GP problems \cite{Helmuth:2014:ieeeTEC, Helmuth:2014:GECCO, Krawiec:2015:GECCO:smgpWorkshop, Helmuth:2013:GECCOcomp}.
+
+% - diversity results (both lexicase paper and dissertation)
 
 \section{Hyperselection}
 \label{section:hyperselection}
