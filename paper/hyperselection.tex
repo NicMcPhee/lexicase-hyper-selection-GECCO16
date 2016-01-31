@@ -301,8 +301,6 @@ assuming no two individuals have the same fitness~\cite{350042, Blickle:1995:MAT
 \label{fig:prob-selection-tourney-7}
 \end{figure}
 
-\todo[inline]{We have data on the claim below about individuals receiving over 90\% of the selections, but there's nothing in the current draft of this paper. Do we want something concrete, or just leave it like this?} 
-
 From Equation~\ref{tourneyProbEquation}, we see that in our runs using population size 1000 and tournament size 7, the best few individuals will be selected approximately 0.7\% of the time each. This also follows from the fact that every individual will participate in approximately 0.7\% of the tournaments, and the best individual will win each tournament in which it participates.
 With tournament selection it would therefore be unlikely to hyper-select many individuals at the 1\% level in a generation, and extremely unlikely for any individuals to be hyper selected at the 5\% or 10\% level.
 On the other hand, we have observed numerous examples of lexicase selection rewarding an interesting individual with over 90\% of the selections in a generation. We therefore expect lexicase selection to produce non-zero numbers of hyper-selections at the 5\% and 10\% levels, though without empirical data it is unclear how common these will be.
