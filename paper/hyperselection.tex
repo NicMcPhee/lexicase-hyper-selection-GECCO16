@@ -239,9 +239,10 @@ In the following section (Section \ref{section:lexicase}), we  describe the lexi
 
 %- no verbatim copying (besides dissertation)
 
-In a population-based stochastic search algorithm such as GP, lexicase\footnote{The term ``lexicase'' has been used previously in unrelated work \cite{Starosta:1986:LPL:991365.991400, starosta1988case}.} selection provides a method for selecting individuals to serve as parents of new individuals. As a behavior-based search driver \cite{Krawiec:2015:GPTP}, it can be used any time that potential parents are assessed with respect to multiple test cases.
+Lexicase\footnote{The term ``lexicase'' has been used previously in unrelated work~\cite{Starosta:1986:LPL:991365.991400, starosta1988case}.} selection is a method for selecting individuals to serve as parents in population-based stochastic search algorithms such as GP. As a behavior-based search driver~\cite{Krawiec:2015:GPTP}, it can be used any time that potential parents are assessed with respect to multiple test cases.
+Previous work has shown that lexicase selection can effectively increase performance while also increasing behavioral diversity on a variety of GP problems~\cite{Helmuth:2014:ieeeTEC, Helmuth:2014:GECCO, Krawiec:2015:GECCO:smgpWorkshop, Helmuth:2013:GECCOcomp}.
 
-
+The lexicase selection algorithm is outlined in Figure~\ref{lexicase}. The key idea is that the test cases are randomly shuffled for \emph{each} selection event, and then considered in that order. For each test case, the only individuals that are kept are those whose error is minimal \emph{among those still under consideration}. This filtering is then repeated for each test case until there is only a single individual left or until all the test cases have been considered, in which case an individual is randomly chosen from the remaining pool.
 
 %- algorithm
 
@@ -267,18 +268,21 @@ In a population-based stochastic search algorithm such as GP, lexicase\footnote{
 \caption{\label{lexicase}Pseudocode for the lexicase selection algorithm.}
 \end{figure}
 
+Because the ordering of the test cases is randomized for each selection, the priority of test cases is different for each selection. Assuming the population size is considerably larger than the number of test cases, this ensures that each test case is most important (first in the order) for several of the selections, and very important (in the early part of the order) for many more selections. The idea, then, is that this can help maintain population diversity by ensuring that the population does not converge on solutions that focus on a subset of easy test cases while ignoring the harder ones. This has been shown to be true in a number of software synthesis benchmark problems, where lexicase selection substantially outperforms tournament selection and implicit fitness sharing~\cite{Helmuth:2015:GECCO,Helmuth:2015:dissertation} and typically maintains higher levels of diversity~\cite{Helmuth:2015:GPTP}.
+
 %- characteristics (brief)
 
 
 %- cite previous results
 % - performance results
 
-We have previously shown that lexicase selection can effectively increase performance while also increasing behavioral diversity on a variety of GP problems \cite{Helmuth:2014:ieeeTEC, Helmuth:2014:GECCO, Krawiec:2015:GECCO:smgpWorkshop, Helmuth:2013:GECCOcomp}.
 
 % - diversity results (both lexicase paper and dissertation)
 
 \section{Hyperselection}
 \label{section:hyperselection}
+
+Analysis of runs using lexicase selection has revealed a tendency towards \emph{hyperselection}, where individuals are chosen far more than would be mathematically possible using many of the common selection methods such as tournament selection.
 
 Let us call an individual \definition{hyper-selected at the $X\%$ level} if that individual receives at least $X\%$ of the parent selections in a single generation. For example, an individual that receives at least 170 selections out of 1700 total in a generation is considered hyper-selected at the 10\% level (as well as any level below 10\%). Examining hyper-selection events can help us characterize how often single individuals receive a large percent of the selections in their generations; here, we will %(somewhat arbitrarily) 
 look at hyper-selection events at the 1\%, 5\%, and 10\% levels.
