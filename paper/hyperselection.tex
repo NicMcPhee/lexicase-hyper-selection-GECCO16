@@ -241,8 +241,9 @@ In the following section (Section~\ref{section:lexicase}), we  describe the lexi
 
 %\footnote{The term ``lexicase'' has been used previously in unrelated work~\cite{Starosta:1986:LPL:991365.991400, starosta1988case}.}
 
-Lexicase selection is a method for selecting individuals to serve as parents in population-based stochastic search algorithms such as GP. As a behavior-based search driver~\cite{Krawiec:2015:GPTP}, it can be used any time that potential parents are assessed with respect to multiple test cases.
-Previous work has shown that lexicase selection can effectively increase performance while also increasing behavioral diversity on a variety of GP problems~\cite{Helmuth:2014:ieeeTEC, Helmuth:2014:GECCO, Krawiec:2015:GECCO:smgpWorkshop, Helmuth:2013:GECCOcomp}.
+Lexicase selection is a method for selecting individuals to serve as parents in population-based stochastic search algorithms such as GP~\cite{Helmuth:2014:ieeeTEC, Spector:2012:GECCOcompANEW}. As a behavior-based search driver~\cite{Krawiec:2015:GPTP}, it can be used any time that potential parents are assessed with respect to multiple test cases.
+Previous work has shown that lexicase selection can effectively increase performance while also increasing behavioral diversity on a variety of GP problems~\cite{Helmuth:2015:GECCO, Helmuth:2014:ieeeTEC, Krawiec:2015:GECCO:smgpWorkshop, Helmuth:2015:GPTP}.
+% Uncited, probably not worth it: {Helmuth:2014:GECCO, Helmuth:2013:GECCOcomp}.
 
 The lexicase selection algorithm is outlined in Figure~\ref{lexicase}. The key idea is that the test cases are randomly shuffled for \emph{each} selection event, and then considered in that order. For each test case, the only individuals that are kept are those whose error is minimal \emph{among those still under consideration}. This filtering is then repeated for each test case until there is only a single individual left or until all the test cases have been considered, in which case an individual is randomly chosen from the remaining pool.
 
