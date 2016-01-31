@@ -239,7 +239,9 @@ In the following section (Section~\ref{section:lexicase}), we  describe the lexi
 
 %- no verbatim copying (besides dissertation)
 
-Lexicase\footnote{The term ``lexicase'' has been used previously in unrelated work~\cite{Starosta:1986:LPL:991365.991400, starosta1988case}.} selection is a method for selecting individuals to serve as parents in population-based stochastic search algorithms such as GP. As a behavior-based search driver~\cite{Krawiec:2015:GPTP}, it can be used any time that potential parents are assessed with respect to multiple test cases.
+%\footnote{The term ``lexicase'' has been used previously in unrelated work~\cite{Starosta:1986:LPL:991365.991400, starosta1988case}.}
+
+Lexicase selection is a method for selecting individuals to serve as parents in population-based stochastic search algorithms such as GP. As a behavior-based search driver~\cite{Krawiec:2015:GPTP}, it can be used any time that potential parents are assessed with respect to multiple test cases.
 Previous work has shown that lexicase selection can effectively increase performance while also increasing behavioral diversity on a variety of GP problems~\cite{Helmuth:2014:ieeeTEC, Helmuth:2014:GECCO, Krawiec:2015:GECCO:smgpWorkshop, Helmuth:2013:GECCOcomp}.
 
 The lexicase selection algorithm is outlined in Figure~\ref{lexicase}. The key idea is that the test cases are randomly shuffled for \emph{each} selection event, and then considered in that order. For each test case, the only individuals that are kept are those whose error is minimal \emph{among those still under consideration}. This filtering is then repeated for each test case until there is only a single individual left or until all the test cases have been considered, in which case an individual is randomly chosen from the remaining pool.
@@ -353,15 +355,15 @@ SLT gives the highest probabilities of selection to those individuals that lexic
   & \multicolumn{3}{c|}{\textbf{Lexicase}} & \multicolumn{3}{c|}{\textbf{Tournament}} & \multicolumn{3}{c}{\textbf{SLT}} \\
 \textbf{Problem} & \textbf{1\%}  & \textbf{5\%}  & \textbf{10\%}  & \textbf{1\%}      & \textbf{5\%}      & \textbf{10\%}   & \textbf{1\%}      & \textbf{5\%}      & \textbf{10\%}  \\
 \midrule
+Count Odds                 & 0.49  & 0.02 & 0.00 & 0.70 & 0.00 & 0.00 & 1.54 & 0.00 & 0.00 \\
 Double Letters             & 12.28 & 0.29 & 0.09 & 0.36 & 0.00 & 0.00 & 1.54 & 0.00 & 0.00 \\
+Mirror Image               & 9.72  & 0.23 & 0.05 & 0.22 & 0.00 & 0.00 & 1.55 & 0.00 & 0.00 \\
+Negative To Zero           & 8.21  & 0.39 & 0.16 & 0.43 & 0.00 & 0.00 & 1.55 & 0.00 & 0.00 \\
 Replace Space with Newline & 13.39 & 0.38 & 0.11 & 0.28 & 0.00 & 0.00 & 1.56 & 0.00 & 0.00 \\
 String Lengths Backwards   & 6.21  & 0.54 & 0.25 & 0.42 & 0.00 & 0.00 & 1.53 & 0.00 & 0.00 \\
-Vector Average             & 6.99  & 0.02 & 0.01 & 0.91 & 0.00 & 0.00 & 1.56 & 0.00 & 0.00 \\
-Count Odds                 & 0.49  & 0.02 & 0.00 & 0.70 & 0.00 & 0.00 & 1.54 & 0.00 & 0.00 \\
-Mirror Image               & 9.72  & 0.23 & 0.05 & 0.22 & 0.00 & 0.00 & 1.55 & 0.00 & 0.00 \\
-X-Word Lines               & 5.31  & 0.13 & 0.04 & 0.36 & 0.00 & 0.00 & 1.55 & 0.00 & 0.00 \\
-Negative To Zero           & 8.21  & 0.39 & 0.16 & 0.43 & 0.00 & 0.00 & 1.55 & 0.00 & 0.00 \\
 Syllables                  & 5.74  & 0.13 & 0.05 & 0.38 & 0.00 & 0.00 & 1.55 & 0.00 & 0.00 \\
+Vector Average             & 6.99  & 0.02 & 0.01 & 0.91 & 0.00 & 0.00 & 1.56 & 0.00 & 0.00 \\
+X-Word Lines               & 5.31  & 0.13 & 0.04 & 0.36 & 0.00 & 0.00 & 1.55 & 0.00 & 0.00 \\
 \bottomrule
 \end{tabu}
 \end{table*}
@@ -373,28 +375,24 @@ In these runs, SLT usually had lower hyper-selection at the 1\% level than lexic
 Since we have shown that SLT has similar hyper-selection characteristics to tournament selection, let us now examine its performance results in these runs, which we present in Table~\ref{table:slt-results}. Across these 9 problems, SLT shows very similar performance to lexicase selection, and better performance than tournament selection on every problem. Both SLT and lexicase found at least one solution on each of the 9 problems, where tournament selection only found solutions to 6 of the problems. Comparing these methods using a chi-square test with the Holm correction, SLT never has a significantly different success rate compared to lexicase selection. SLT is significantly better than tournament selection on the same problems as lexicase except for Count Odds and X-Word Lines, on which it achieved fewer than the 8 successes necessary to be significantly better than tournament.
  SLT seems to slightly outperform lexicase selection on the easier problems where both find more solutions, and lexicase selection slightly outperforms SLT on the more difficult problems where both find fewer solutions, though the difference is never significant.
 
-\todo[inline]{Tom: Should we add which results are significantly better than tournament? I had those in a different table in my thesis, but it seems like it would be worthwhile to have here.
-	
-	Nic: Can you just add an asterisk next to the problem names where the number of successes is statistically significantly better, and then note it in the caption? That would seem to be nice.}
-
 \begin{table}[t]
 \centering
-\caption{Number of successful runs out of 100 for each setting on each problem.}
+\caption{Number of successful runs out of 100 for each setting on each problem. For each problem, \underline{underline}~indicates significant improvement over tournament selection using a pairwise chi-squared test with Holm correction and 0.05 significance level. SLT and lexicase selection never have significantly different success rates.}
 \label{table:slt-results}
 \rowcolors{2}{Gray}{white}
 \begin{tabular}{lrrr}
 \toprule
 \textbf{Problem}                    & \textbf{Lex} & \textbf{Tourn} & \textbf{SLT} \\
 \midrule
+Count Odds                 & \underline{8}        & 0          & 5   \\
 Double Letters             & 6        & 0          & 4   \\
-Replace Space with Newline & 51       & 8          & 61  \\
-String Lengths Backwards   & 66       & 7          & 79  \\
-Vector Average             & 16       & 14         & 30  \\
-Count Odds                 & 8        & 0          & 5   \\
-Mirror Image               & 78       & 46         & 84  \\
-X-Word Lines               & 8        & 0          & 4   \\
-Negative To Zero           & 45       & 10         & 53  \\
-Syllables                  & 18       & 1          & 13  \\
+Mirror Image               & \underline{78}       & 46         & \underline{84}  \\
+Negative To Zero           & \underline{45}       & 10         & \underline{53}  \\
+Replace Space with Newline & \underline{51}       & 8          & \underline{61}  \\
+String Lengths Backwards   & \underline{66}       & 7          & \underline{79}  \\
+Syllables                  & \underline{18}       & 1          & \underline{13}  \\
+Vector Average             & 16       & 14         & \underline{30}  \\
+X-Word Lines               & \underline{8}        & 0          & 4   \\
 \bottomrule
 \end{tabular}
 \end{table}
