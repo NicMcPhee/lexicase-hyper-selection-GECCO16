@@ -271,10 +271,10 @@ Since lexicase emphasizes each test case in some number of selections each gener
 Other parent selection techniques have been invented to achieve similar goals to lexicase selection \cite{Fieldsend:2015:GECCO, Krawiec:ppsn2010, Krawiec:2015:EuroGP, Galvan-Lopez:2013:CEC}. Because the aim of this paper is only to investigate the relationship between hyperselection and lexicase selection, and not to compare lexicase selection to other selection methods, further discussion of alternate selection methods is outside the scope of this paper.
 
 
-\section{Hyperselection}
+\section[Hyperselection]{Hyperselection}
 \label{section:hyperselection}
 
-Analysis of runs using lexicase selection has revealed a tendency towards \emph{hyperselection}, where individuals are chosen far more than would be mathematically possible using many of the common selection methods such as tournament selection.
+Analysis of runs using lexicase selection has revealed a tendency towards \emph{hyperselection}, where individuals are chosen far more than would be mathematically possible using many of the common selection methods such as tournament selection\footnote{Much of the following text is adapted from the author's Ph.D. dissertation \cite{Helmuth:2015:dissertation}, but not previously published elsewhere.}.
 
 Let us call an individual \definition{hyper-selected at the $X\%$ level} if that individual receives at least $X\%$ of the parent selections in a single generation. For example, an individual that receives at least 170 selections out of 1700 total in a generation is considered hyper-selected at the 10\% level (as well as any level below 10\%). Examining hyper-selection events can help us characterize how often single individuals receive a large percent of the selections in their generations; here, we will %(somewhat arbitrarily) 
 look at hyper-selection events at the 1\%, 5\%, and 10\% levels.
