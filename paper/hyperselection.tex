@@ -220,7 +220,7 @@ For problems involving multiple test cases, most parent selection methods select
 
 Lexicase selection is a parent selection method in which parents are selected not on the basis of aggregate performance across all test cases, but instead on the basis of performance on individual test cases, considered one at a time in random order. The lexicase selection algorithm is described in full detail in Section~\ref{section:lexicase}.
 
-In previous work, lexicase selection has been shown to significantly enhance the problem-solving power of genetic programming relative to standard tournament selection and to tournament selection with implicit fitness sharing, in which the aggregate measure is weighted by case difficulty {\bf (CANONICAL IFS CITATION)}. For example, in~\cite{Helmuth:2014:ieeeTEC} it was shown that lexicase selection can significantly enhance the ability of genetic programming to find terms in finite algebras, to design digital multipliers, to produce programs that replicate the {\ttfamily wc} command, and to perform symbolic regression of the factorial function. In~\cite{Helmuth:2015:dissertation} it was shown to significantly enhance the ability of genetic programming to solve the problems in a software synthesis benchmark suite~\cite{Helmuth:2015:GECCO}.
+In previous work, lexicase selection has been shown to significantly enhance the problem-solving power of genetic programming relative to standard tournament selection and to tournament selection with implicit fitness sharing, in which the aggregate measure is weighted by case difficulty~\cite{McKay:2000:GECCO}. For example, in~\cite{Helmuth:2014:ieeeTEC} it was shown that lexicase selection can significantly enhance the ability of genetic programming to find terms in finite algebras, to design digital multipliers, to produce programs that replicate the {\ttfamily wc} command, and to perform symbolic regression of the factorial function. In~\cite{Helmuth:2015:dissertation} it was shown to significantly enhance the ability of genetic programming to solve the problems in a software synthesis benchmark suite~\cite{Helmuth:2015:GECCO}.
 
 Subsequent investigations have aimed to shed light on the reasons that lexicase selection can enhance problem-solving performance, with an eye toward refinement of the method or the development of more powerful methods. For example, studies of population diversity under lexicase selection have shown that it tends to produce and maintain significantly more diverse populations than those produced by tournament selection or implicit fitness sharing, and that it also tends to produce and propagate specialist individuals that do well on some cases but poorly on others~\cite{Helmuth:2015:GPTP,Helmuth:2015:dissertation}.
 
@@ -229,25 +229,18 @@ The study described in the present paper stems from an observation that when lex
 In the following section (Section~\ref{section:lexicase}), we  describe the lexicase selection algorithm. In Section~\ref{section:hyperselection}, we formally define hyperselection and discuss the selection frequency profile of standard tournament selection, in which hyperselection should be rare or absent. We then proceed to investigate role that hyperselection plays in the problem-solving performance of lexicase selection, first by conducting runs of genetic programming on a set of software synthesis benchmark problems, using lexicase and tournament selection. As shown in Section~\ref{section:experiments}, our results confirm that hyperselection occurs only with the former. In Section~\ref{section:HyperSelectionandLexicasePerformance}, we test the hypothesis that   lexicase selection's improved performance over tournament selection depends on hyperselection. To do this, we introduce a new \emph{sampled lexicase-tournament selection} method, which chooses individuals from a pool produced by lexicase selection, but with frequencies similar to those of tournament selection. If hyperselection is responsible for the problem-solving performance of lexicase selection, which is far better than that of tournament selection, then sampled lexicase-tournament selection should not perform as well as lexicase selection. But the results that we present show that sampled lexicase-tournament selection does indeed perform comparably to lexicase selection. In Section~\ref{section:conclusions}, we present our conclusion that the power of lexicase selection stems from the collection of individuals that it tends to select, not from the unusual frequencies with which it sometimes selects them. We also suggest some directions for future research.
 
 
-
-
-
 \section{Lexicase Selection}
 \label{section:lexicase}
 
-\todo[inline]{Also, this is where some other selection methods should be briefly mentioned, with citations, so we're not dinged for neglecting related work, but then we say: Because the aim of this paper is only to investigate the relationship between hyperselection and lexicase selection, and not to compare lexicase selection to other selection methods, further discussion of alternate selection methods is outside the scope of this paper.}
-
-%- no verbatim copying (besides dissertation)
-
 %\footnote{The term ``lexicase'' has been used previously in unrelated work~\cite{Starosta:1986:LPL:991365.991400, starosta1988case}.}
 
-Lexicase selection is a method for selecting individuals to serve as parents in population-based stochastic search algorithms such as GP~\cite{Helmuth:2014:ieeeTEC, Spector:2012:GECCOcompANEW}. As a behavior-based search driver~\cite{Krawiec:2015:GPTP}, it can be used any time that potential parents are assessed with respect to multiple test cases.
+Lexicase selection is a method for selecting individuals to serve as parents in population-based stochastic search algorithms such as GP~\cite{Helmuth:2014:ieeeTEC, Spector:2012:GECCOcompANEW}. As a behavior-based search driver~\cite{Krawiec:2015:GPTP}, % I think this citation is an important tie to Krawiec's work
+it can be used any time that potential parents are assessed with respect to multiple test cases.
 Previous work has shown that lexicase selection can effectively increase performance while also increasing behavioral diversity on a variety of GP problems~\cite{Helmuth:2015:GECCO, Helmuth:2014:ieeeTEC, Krawiec:2015:GECCO:smgpWorkshop, Helmuth:2015:GPTP}.
 % Uncited, probably not worth it: {Helmuth:2014:GECCO, Helmuth:2013:GECCOcomp}.
 
 We outline the lexicase selection algorithm in Figure~\ref{lexicase}. The key idea is that the test cases are randomly shuffled for \emph{each} selection event, and then considered in that order. For each test case, the only individuals that are kept are those whose error is minimal \emph{among those still under consideration}. This filtering is then repeated for each test case until there is only a single individual left or until all the test cases have been considered, in which case an individual is randomly chosen from the remaining pool.
 
-%- algorithm
 
 \begin{figure}%[!t]
 \centering
@@ -275,14 +268,8 @@ Because the ordering of the test cases is randomized for each selection, the pri
 
 Since lexicase emphasizes each test case in some number of selections each generation, it does not base selection on a single measure of performance. Methods like tournament selection that use a single fitness value tend to select \textit{generalist} individuals that have good average performance across all test cases, but may not perform particularly well on any. This difference allows lexicase selection to maintain higher population diversity by emphasizing a different part of the problem for each selection, where tournament selection loses diversity by reqiuring individuals to have good average performance to be selected. This difference in diversity has been shown empirically on a number of software synthesis benchmark problems, where lexicase selection substantially outperforms standard tournament selection or tournament selection with implicit fitness sharing~\cite{Helmuth:2015:GECCO,Helmuth:2015:dissertation} and typically maintains higher levels of diversity~\cite{Helmuth:2015:GPTP}.
 
-%- characteristics (brief)
+Other parent selection techniques have been invented to achieve similar goals to lexicase selection \cite{Fieldsend:2015:GECCO, Krawiec:ppsn2010, Krawiec:2015:EuroGP, Galvan-Lopez:2013:CEC}. Because the aim of this paper is only to investigate the relationship between hyperselection and lexicase selection, and not to compare lexicase selection to other selection methods, further discussion of alternate selection methods is outside the scope of this paper.
 
-
-%- cite previous results
-% - performance results
-
-
-% - diversity results (both lexicase paper and dissertation)
 
 \section{Hyperselection}
 \label{section:hyperselection}
