@@ -373,7 +373,9 @@ In these runs, SLT usually had lower hyper-selection at the 1\% level than lexic
 Since we have shown that SLT has similar hyper-selection characteristics to tournament selection, let us now examine its performance results in these runs, which we present in Table~\ref{table:slt-results}. Across these 9 problems, SLT shows very similar performance to lexicase selection, and better performance than tournament selection on every problem. Both SLT and lexicase found at least one solution on each of the 9 problems, where tournament selection only found solutions to 6 of the problems. Comparing these methods using a chi-square test with the Holm correction, SLT never has a significantly different success rate compared to lexicase selection. SLT is significantly better than tournament selection on the same problems as lexicase except for Count Odds and X-Word Lines, on which it achieved fewer than the 8 successes necessary to be significantly better than tournament.
  SLT seems to slightly outperform lexicase selection on the easier problems where both find more solutions, and lexicase selection slightly outperforms SLT on the more difficult problems where both find fewer solutions, though the difference is never significant.
 
-\todo[inline]{Tom: Should we add which results are significantly better than tournament? I had those in a different table in my thesis, but it seems like it would be worthwhile to have here.}
+\todo[inline]{Tom: Should we add which results are significantly better than tournament? I had those in a different table in my thesis, but it seems like it would be worthwhile to have here.
+	
+	Nic: Can you just add an asterisk next to the problem names where the number of successes is statistically significantly better, and then note it in the caption? That would seem to be nice.}
 
 \begin{table}[t]
 \centering
@@ -397,9 +399,13 @@ Syllables                  & 18       & 1          & 13  \\
 \end{tabular}
 \end{table}
 
-\todo[inline]{Should we just drop this next paragraph? -- Nic\\ Tom: I don't think so -- I think it's worth mentioning that the diversity is similar. If it were different, it could be a reason to prefer one or the other even though it didn't affect success rates on these problems, since different diversity might be important on other problems. In fact, if we have room, it might be worthwhile to insert one or two diversity plots here.}
+\todo[inline]{Should we just drop this next paragraph? -- Nic\\ Tom: I don't think so -- I think it's worth mentioning that the diversity is similar. If it were different, it could be a reason to prefer one or the other even though it didn't affect success rates on these problems, since different diversity might be important on other problems. In fact, if we have room, it might be worthwhile to insert one or two diversity plots here.
+	
+	Nic: There does seem to be room, so I'd be inclined to include them.}
 We plotted the diversity across generations from the runs using SLT, as we did for other techniques in Section~\ref{section:exploration}. Interestingly, the diversity plots for SLT were virtually indistinguishable from those of lexicase selection, so we omit them here. Thus, even though the techniques produce significantly different hyper-selection rates, their populations still maintain similar abilities to search widely.
-\todo[inline]{Tom: We should tweak the above paragraph. One change should be to cite the lexicase paper and/or my dissertation where we show that lexicase leads to much higher diversity than tourney (and IFS). Or maybe that should be mentioned in the lexicase section?}
+\todo[inline]{Tom: We should tweak the above paragraph. One change should be to cite the lexicase paper and/or my dissertation where we show that lexicase leads to much higher diversity than tourney (and IFS). Or maybe that should be mentioned in the lexicase section?
+	
+	Nic: I added a (brief) mention of the diversity results (with a citation) in the Lexicase section. Is that enough, or should more be said?}
 
 These results show that even though SLT has much lower hyper-selection characteristics than lexicase selection, never selecting a single individual to parent more than 5\% of the children in a generation, it nevertheless maintains the problem-solving performance shown by lexicase selection. These results give strong evidence against the hypothesis that lexicase selection's increased exploitation of hyper-selected individuals is important in its ability to outperform tournament selection and IFS. Instead, this suggests that it is more important \textit{which} individuals lexicase selection selects most often, which it has in common with SLT but not tournament selection.
 
