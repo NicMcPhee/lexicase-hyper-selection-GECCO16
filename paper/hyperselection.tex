@@ -58,6 +58,7 @@
 \usepackage{booktabs}
 \usepackage[table]{xcolor}
 \definecolor{Gray}{gray}{0.9}
+\definecolor{light-gray}{gray}{0.95}
 
 \usepackage{todonotes}
 
@@ -308,7 +309,32 @@ Tom: Done. Data is in Discourse. Do we want to report this at all? I'm ambivalen
 To empirically measure hyperselection, we gathered data from genetic programming runs using lexicase selection and tournament selection with size 7 tournaments. We tested each selection method on nine problems chosen from a recent general program synthesis benchmark suite~\cite{Helmuth:2015:GECCO}, a subset exhibiting a range of problem requirements and difficulties. We conducted 100 runs for each problem and parameter combination. We used PushGP \cite{spector:2002:GPEM, 1068292}, a stack-based genetic programming system, for these experiments since it supports a variety of control structures and multiple data types, making it a good choice for program synthesis tasks. Lexicase selection has also been shown to be effective in tree-based genetic programming \cite{Helmuth:2014:ieeeTEC, Krawiec:2015:GECCO:smgpWorkshop}.
 
 We then calculated the average number of hyperselected individuals at the 1\%, 5\%, and 10\% levels per generation, which we present in the first three major columns of Table~\ref{table:slt-hyperselection}. On all problems except one, lexicase selection hyperselects 5 or more individuals per generation on average at the 1\% level; tournament selection averages less than one per generation on all problems, though always greater than 0.2. Unsurprisingly, tournament selection never hyperselected an individual at the 5\% or 10\% levels.
-On 7 of the 9 problems, lexicase selection hyperselected one individual at the 5\% level in every 2 to 10 generations on average, and one individual at the 10\% level every 4 to 25 generations on average. 
+On 7 of the 9 problems, lexicase selection hyperselected one individual at the 5\% level in every 2 to 10 generations on average, and one individual at the 10\% level every 4 to 25 generations on average.
+
+\begin{table*}[t]
+	\centering
+	\caption{
+		The average number of hyperselected individuals at the 1\%, 5\%, and 10\% levels per generation for lexicase selection, tournament selection and SLT selection.
+	}
+	\label{table:slt-hyperselection}
+	\rowcolors{3}{white}{light-gray}
+	\begin{tabu} to \textwidth {l | rrr | rrr | rrr}
+		\toprule
+		& \multicolumn{3}{c|}{\textbf{Lexicase}} & \multicolumn{3}{c|}{\textbf{Tournament}} & \multicolumn{3}{c}{\textbf{SLT}} \\
+		\textbf{Problem} & \textbf{1\%}  & \textbf{5\%}  & \textbf{10\%}  & \textbf{1\%}      & \textbf{5\%}      & \textbf{10\%}   & \textbf{1\%}      & \textbf{5\%}      & \textbf{10\%}  \\
+		\midrule
+		Count Odds                 & 0.49  & 0.02 & 0.00 & 0.70 & 0.00 & 0.00 & 1.54 & 0.00 & 0.00 \\
+		Double Letters             & 12.28 & 0.29 & 0.09 & 0.36 & 0.00 & 0.00 & 1.54 & 0.00 & 0.00 \\
+		Mirror Image               & 9.72  & 0.23 & 0.05 & 0.22 & 0.00 & 0.00 & 1.55 & 0.00 & 0.00 \\
+		Negative To Zero           & 8.21  & 0.39 & 0.16 & 0.43 & 0.00 & 0.00 & 1.55 & 0.00 & 0.00 \\
+		Replace Space with Newline & 13.39 & 0.38 & 0.11 & 0.28 & 0.00 & 0.00 & 1.56 & 0.00 & 0.00 \\
+		String Lengths Backwards   & 6.21  & 0.54 & 0.25 & 0.42 & 0.00 & 0.00 & 1.53 & 0.00 & 0.00 \\
+		Syllables                  & 5.74  & 0.13 & 0.05 & 0.38 & 0.00 & 0.00 & 1.55 & 0.00 & 0.00 \\
+		Vector Average             & 6.99  & 0.02 & 0.01 & 0.91 & 0.00 & 0.00 & 1.56 & 0.00 & 0.00 \\
+		X-Word Lines               & 5.31  & 0.13 & 0.04 & 0.36 & 0.00 & 0.00 & 1.55 & 0.00 & 0.00 \\
+		\bottomrule
+	\end{tabu}
+\end{table*}
 
 The Vector Average and Count Odds problems showed much lower levels of hyperselection with lexicase selection, especially at the 5\% and 10\% levels, indicating that selecting a single individual to parent many of the children in a single generation was rarer on those problems. These two problems were also among the least-solved problems in this subset of the benchmark problems; one hypothesis is that most of the genetic programming runs had trouble getting any traction on these problems, leading to more homogeneous populations and fewer hyperselection events than on other problems.
 
@@ -338,31 +364,6 @@ To test this hypothesis, we designed a new parent selection algorithm that selec
 SLT can be seen as a variation of tournament selection in which fitness is based on lexicase sampling instead of total error.
 SLT gives the highest probabilities of selection to those individuals that lexicase would select the most often in the population. But, since it uses tournaments for selection, its probability of selecting the individual ranked $i$ in the lexicase-sampled ranking will be same as in tournament selection, as given in Equation~\ref{tourneyProbEquation}. Therefore, we would expect the hyperselection characteristics of SLT to mirror those of tournament selection, and differ only when the two behave differently with respect to tied individuals in the rankings, especially ties amongst the best individuals. To be clear, we developed SLT not because we believe it could be a useful parent selection method, but instead because it will allow us to test the hypothesis that hyperselection events are critical to lexicase selection's improved performance over tournament selection.
 
-\begin{table*}[t]
-\centering
-\caption{
-	The average number of hyperselected individuals at the 1\%, 5\%, and 10\% levels per generation for lexicase selection, tournament selection and SLT selection.
-}
-\label{table:slt-hyperselection}
-\rowcolors{3}{white}{Gray}
-\begin{tabu} to \textwidth {l | rrr | rrr | rrr}
-\toprule
-  & \multicolumn{3}{c|}{\textbf{Lexicase}} & \multicolumn{3}{c|}{\textbf{Tournament}} & \multicolumn{3}{c}{\textbf{SLT}} \\
-\textbf{Problem} & \textbf{1\%}  & \textbf{5\%}  & \textbf{10\%}  & \textbf{1\%}      & \textbf{5\%}      & \textbf{10\%}   & \textbf{1\%}      & \textbf{5\%}      & \textbf{10\%}  \\
-\midrule
-Count Odds                 & 0.49  & 0.02 & 0.00 & 0.70 & 0.00 & 0.00 & 1.54 & 0.00 & 0.00 \\
-Double Letters             & 12.28 & 0.29 & 0.09 & 0.36 & 0.00 & 0.00 & 1.54 & 0.00 & 0.00 \\
-Mirror Image               & 9.72  & 0.23 & 0.05 & 0.22 & 0.00 & 0.00 & 1.55 & 0.00 & 0.00 \\
-Negative To Zero           & 8.21  & 0.39 & 0.16 & 0.43 & 0.00 & 0.00 & 1.55 & 0.00 & 0.00 \\
-Replace Space with Newline & 13.39 & 0.38 & 0.11 & 0.28 & 0.00 & 0.00 & 1.56 & 0.00 & 0.00 \\
-String Lengths Backwards   & 6.21  & 0.54 & 0.25 & 0.42 & 0.00 & 0.00 & 1.53 & 0.00 & 0.00 \\
-Syllables                  & 5.74  & 0.13 & 0.05 & 0.38 & 0.00 & 0.00 & 1.55 & 0.00 & 0.00 \\
-Vector Average             & 6.99  & 0.02 & 0.01 & 0.91 & 0.00 & 0.00 & 1.56 & 0.00 & 0.00 \\
-X-Word Lines               & 5.31  & 0.13 & 0.04 & 0.36 & 0.00 & 0.00 & 1.55 & 0.00 & 0.00 \\
-\bottomrule
-\end{tabu}
-\end{table*}
-
 We conducted 100 runs of PushGP using SLT on the same 9 benchmark problems; the hyperselection results for SLT are also included in Table~\ref{table:slt-hyperselection}. The first thing to note is that SLT has higher hyperselection at the 1\% level than tournament selection. Theoretically, we would expect SLT to behave similarly to tournament selection if neither had ties in rank within the population. We believe the differences we see here are a product of ties in total error when using tournament selection, especially near the top of the rankings. The relative consistency of SLT's 1\%-level hyperselection likely comes from the fact that it rarely had large numbers of tied individuals near the top of the rankings---we expect that tournament selection without ranking ties would also average around 1.55 hyperselections at the 1\% level per generation.
 
 In these runs, SLT usually had lower hyperselection at the 1\% level than lexicase selection, and always lower at the 5\% and 10\% levels, on which it never had a non-zero result. Since SLT was designed to have similar hyperselection characteristics as tournament selection, it is unsurprising that it received no hyperselections at the upper levels. This means that SLT succeeds in our goal of creating a lexicase-based selection mechanism that never puts as much as 5\% of the parent selections in a generation on a single individual. This contrasts with lexicase selection, which often selects single individuals to make large numbers of the children for the next generation.
@@ -374,7 +375,7 @@ Since we have shown that SLT has similar hyperselection characteristics to tourn
 \centering
 \caption{Number of successful runs out of 100 for each setting on each problem. For each problem, \underline{underline}~indicates significant improvement over tournament selection using a pairwise chi-squared test with Holm correction and 0.05 significance level. SLT and lexicase selection never have significantly different success rates.}
 \label{table:slt-results}
-\rowcolors{2}{Gray}{white}
+\rowcolors{2}{light-gray}{white}
 \begin{tabular}{lrrr}
 \toprule
 \textbf{Problem}                    & \textbf{Lex} & \textbf{Tourn} & \textbf{SLT} \\
