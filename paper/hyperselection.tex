@@ -276,7 +276,7 @@ Other parent selection techniques have been invented to achieve similar goals to
 
 Analysis of runs using lexicase selection has revealed a tendency towards \emph{hyperselection}, where individuals are chosen far more than would be mathematically possible using many of the common selection methods such as tournament selection\footnote{Much of the following text is adapted from the author's Ph.D. dissertation \cite{Helmuth:2015:dissertation}, but not previously published elsewhere.}.
 
-Let us call an individual \definition{hyper-selected at the $X\%$ level} if that individual receives at least $X\%$ of the parent selections in a single generation. For example, an individual that receives at least 170 selections out of 1700 total in a generation is considered hyper-selected at the 10\% level (as well as any level below 10\%). Examining hyperselection events can help us characterize how often single individuals receive a large percent of the selections in their generations; here, we will %(somewhat arbitrarily) 
+Let us call an individual \definition{hyperselected at the $X\%$ level} if that individual receives at least $X\%$ of the parent selections in a single generation. For example, an individual that receives at least 170 selections out of 1700 total in a generation is considered hyperselected at the 10\% level (as well as any level below 10\%). Examining hyperselection events can help us characterize how often single individuals receive a large percent of the selections in their generations; here, we will %(somewhat arbitrarily) 
 look at hyperselection events at the 1\%, 5\%, and 10\% levels.
 
 With tournament selection, the number of times an individual can be selected is limited by the number of tournaments in which it participates, and the number of tournaments in which it participates will depend only on the population and tournament sizes, not on the properties of the individual or other individuals in the population. If the best member of the population participates in 1\% of the tournaments for a given generation, it will be selected 1\% of the time that generation, but no more.
@@ -294,7 +294,7 @@ assuming no two individuals have the same fitness~\cite{350042, Blickle:1995:MAT
 \end{figure}
 
 From Equation~\ref{tourneyProbEquation}, we see that in our runs using population size 1000 and tournament size 7, the best few individuals will be selected approximately 0.7\% of the time each. This also follows from the fact that every individual will participate in approximately 0.7\% of the tournaments, and the best individual will win each tournament in which it participates.
-With tournament selection it would therefore be unlikely to hyper-select many individuals at the 1\% level in a generation, and extremely unlikely for any individuals to be hyper selected at the 5\% or 10\% level.
+With tournament selection it would therefore be unlikely to hyperselect many individuals at the 1\% level in a generation, and extremely unlikely for any individuals to be hyper selected at the 5\% or 10\% level.
 On the other hand, we have observed numerous examples of lexicase selection rewarding an interesting individual with over 90\% of the selections in a generation. We therefore expect lexicase selection to produce non-zero numbers of hyperselections at the 5\% and 10\% levels, though without empirical data it is unclear how common these will be.
 
 \section{Experimental setup}
@@ -306,8 +306,8 @@ Tom: Done. Data is in Discourse. Do we want to report this at all? I'm ambivalen
 }
 
 To measure hyperselection, we gathered data from using lexicase selection and tournament selection with size 7 tournaments on nine benchmark problems from~\cite{Helmuth:2015:GECCO, Helmuth:2015:dissertation}, a subset chosen to exhibit a range of problem requirements and difficulties.
-We then calculated the average number of hyper-selected individuals at the 1\%, 5\%, and 10\% levels per generation, which we present in the first three major columns of Table~\ref{table:slt-hyperselection}. On all problems except one, lexicase selection hyper-selects 5 or more individuals per generation on average at the 1\% level; tournament selection averages less than one per generation on all problems, though always greater than 0.2. Unsurprisingly, tournament selection never hyper-selected an individual at the 5\% or 10\% levels.
-On 7 of the 9 problems, lexicase selection hyper-selected one individual at the 5\% level in every 2 to 10 generations on average, and one individual at the 10\% level every 4 to 25 generations on average. 
+We then calculated the average number of hyperselected individuals at the 1\%, 5\%, and 10\% levels per generation, which we present in the first three major columns of Table~\ref{table:slt-hyperselection}. On all problems except one, lexicase selection hyperselects 5 or more individuals per generation on average at the 1\% level; tournament selection averages less than one per generation on all problems, though always greater than 0.2. Unsurprisingly, tournament selection never hyperselected an individual at the 5\% or 10\% levels.
+On 7 of the 9 problems, lexicase selection hyperselected one individual at the 5\% level in every 2 to 10 generations on average, and one individual at the 10\% level every 4 to 25 generations on average. 
 
 The Vector Average and Count Odds problems showed much lower levels of hyperselection with lexicase selection, especially at the 5\% and 10\% levels, indicating that selecting a single individual to parent many of the children in a single generation was rarer on those problems. These two problems were also among the least-solved problems in this subset of the benchmark problems; one hypothesis is that most of the genetic programming runs had trouble getting any traction on these problems, leading to more homogeneous populations and fewer hyperselection events than on other problems.
 
@@ -320,7 +320,7 @@ Considering that tournament selection conforms to the probability of selection g
 
 \todo[inline]{We could probably get data on the question in the last sentence if we wanted to.\\Tom: We could get some data, but it's not clear to me how we would present it. We'd have to do something like fit a regression line to "number of ties vs. hyper selections". Anyway, it all sounds too complicated to show a point that's nowhere close to our main goals. So, I say leave it as-is.}
 
-The results in Table~\ref{table:slt-hyperselection} clearly show that lexicase selection gives more of its parent selections to single individuals than tournament selection, both at low levels (1\%) and higher levels (5\% and 10\%) of hyperselection. This indicates that lexicase selection more often concentrates its selection pressure on single individuals or small groups of individuals than tournament selection, increasing its exploitation of the individuals it selects most often. This data does not indicate whether lexicase selection is hyper-selecting the same individuals that tournament selection ranks highest (those with best total error), or if it actually selects individuals that would receive few or no selections with tournament selection.
+The results in Table~\ref{table:slt-hyperselection} clearly show that lexicase selection gives more of its parent selections to single individuals than tournament selection, both at low levels (1\%) and higher levels (5\% and 10\%) of hyperselection. This indicates that lexicase selection more often concentrates its selection pressure on single individuals or small groups of individuals than tournament selection, increasing its exploitation of the individuals it selects most often. This data does not indicate whether lexicase selection is hyperselecting the same individuals that tournament selection ranks highest (those with best total error), or if it actually selects individuals that would receive few or no selections with tournament selection.
 
 In Section \ref{section:lexicase} we referenced results that show genetic programming with lexicase selection significantly outperforms genetic programming with tournament selection across many benchmark problems. We have now observed that lexicase selection often concentrates selection pressure into small numbers of individuals. This raises important questions: can we attribute lexicase selection's success to its ability to concentrate selection in hyperselection events? Or, is it more important that lexicase selects different individuals than tournament selection, in some sense the ``right'' individuals to drive evolution toward a solution? We will investigate these questions in Section~\ref{section:HyperSelectionandLexicasePerformance}.
 
@@ -340,7 +340,7 @@ SLT gives the highest probabilities of selection to those individuals that lexic
 \begin{table*}[t]
 \centering
 \caption{
-	The average number of hyper-selected individuals at the 1\%, 5\%, and 10\% levels per generation for lexicase selection, tournament selection and SLT selection.
+	The average number of hyperselected individuals at the 1\%, 5\%, and 10\% levels per generation for lexicase selection, tournament selection and SLT selection.
 }
 \label{table:slt-hyperselection}
 \rowcolors{3}{white}{Gray}
@@ -401,7 +401,7 @@ We plotted the diversity across generations from the runs using SLT, as we did f
 	
 	Nic: I added a (brief) mention of the diversity results (with a citation) in the Lexicase section. Is that enough, or should more be said?}
 
-These results show that even though SLT has much lower hyperselection characteristics than lexicase selection, never selecting a single individual to parent more than 5\% of the children in a generation, it nevertheless maintains the problem-solving performance shown by lexicase selection. These results give strong evidence against the hypothesis that lexicase selection's increased exploitation of hyper-selected individuals is important in its ability to outperform tournament selection with and without implicit fitness sharing. Instead, this suggests that it is more important \textit{which} individuals lexicase selection selects most often, which it has in common with SLT but not tournament selection.
+These results show that even though SLT has much lower hyperselection characteristics than lexicase selection, never selecting a single individual to parent more than 5\% of the children in a generation, it nevertheless maintains the problem-solving performance shown by lexicase selection. These results give strong evidence against the hypothesis that lexicase selection's increased exploitation of hyperselected individuals is important in its ability to outperform tournament selection with and without implicit fitness sharing. Instead, this suggests that it is more important \textit{which} individuals lexicase selection selects most often, which it has in common with SLT but not tournament selection.
 
 While SLT achieved similar performance to lexicase selection in this experiment, it does not otherwise indicate that it would make a better parent selection mechanism. Notably, it will perform slightly slower than lexicase selection in practice, since it performs both lexicase sampling and then tournaments for selection. Even so, it may merit further examination on other types of problems to see if it behaves differently in other settings.
 
@@ -418,7 +418,7 @@ One avenue for future research is to investigate the notion of a ``specialist'' 
 Another is to investigate the connection between hyperselection and population diversity. Other work has shown that lexicase selection produces more diverse populations than tournament selection with or without implicit fitness sharing~\cite{Helmuth:2015:dissertation}, but we have not yet looked carefully at the diversity produced in the absence of hyperselection, as with sampled lexicase-tournament selection.
 
 \todo[inline]{Tom: Have we observed differences in diversity? I forget. Say something about them being worth future study. Additionally, it seems that lexicase selection might be good at rediversifying the population after a hyperselection event.}
-\todo[inline]{Tom: Here's a note I had about the above: Look at the hyper-selected individuals, and what happens to the
+\todo[inline]{Tom: Here's a note I had about the above: Look at the hyperselected individuals, and what happens to the
 population diversity in the first few generations afterward an
 uber-hyperselection event. I think in run6 we saw rapid increases in
 diversity after a valley, which would be interesting if that's the rule
