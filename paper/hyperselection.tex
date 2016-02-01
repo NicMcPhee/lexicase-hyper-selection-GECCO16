@@ -312,7 +312,8 @@ On 7 of the 9 problems, lexicase selection hyperselected one individual at the 5
 		The average number of hyperselected individuals at the 1\%, 5\%, and 10\% levels per generation for lexicase selection, tournament selection and SLT selection.
 	}
 	\label{table:slt-hyperselection}
-	\rowcolors{3}{white}{light-gray}
+%	\rowcolors{3}{white}{light-gray}
+	\taburowcolors[3] 2{white .. light-gray}
 	\begin{tabu} to \textwidth {l | rrr | rrr | rrr}
 		\toprule
 		& \multicolumn{3}{c|}{\textbf{Lexicase}} & \multicolumn{3}{c|}{\textbf{Tournament}} & \multicolumn{3}{c}{\textbf{SLT}} \\
@@ -354,10 +355,11 @@ Table~\ref{table:lexicase-hyperselection-success} shows the average number of hy
 		Average number of hyperselected individuals at the 1\%, 5\%, and 10\% per generation for lexicase selection for five of the nine benchmark problems, broken out into successful and unsuccessful runs.
 	}
 	\label{table:lexicase-hyperselection-success}
-	\rowcolors{3}{white}{light-gray}
-	\begin{tabu} to \textwidth {l | rrr | rrr | rrr}
+%	\rowcolors{3}{white}{light-gray}
+	\taburowcolors[3] 2{white .. light-gray}
+	\begin{tabu} to \textwidth {l | rrr | rrr}
 		\toprule
-		& \multicolumn{3}{c|}{\textbf{Successful}} & \multicolumn{3}{c|}{\textbf{Unsuccessful}} \\
+		& \multicolumn{3}{c|}{\textbf{Successful}} & \multicolumn{3}{c}{\textbf{Unsuccessful}} \\
 		\textbf{Problem} & \textbf{1\%}  & \textbf{5\%}  & \textbf{10\%}  & \textbf{1\%}      & \textbf{5\%}      & \textbf{10\%}  \\
 		\midrule
 		Count Odds                 & 0.84  & 0.07 & 0.02 & 0.47 & 0.01 & 0.00 \\
@@ -365,6 +367,7 @@ Table~\ref{table:lexicase-hyperselection-success} shows the average number of hy
 		Mirror Image               & 9.32  & 0.27 & 0.06 & 10.49 & 0.15 & 0.04 \\
 		Vector Average             & 8.35  & 0.05 & 0.02 & 6.78 & 0.02 & 0.00 \\
 		X-Word Lines               & 5.43  & 0.47 & 0.22 & 5.29 & 0.09 & 0.02 \\
+		\bottomrule
 	\end{tabu}
 \end{table*}
 
