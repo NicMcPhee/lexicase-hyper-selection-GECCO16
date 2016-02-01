@@ -301,11 +301,6 @@ On the other hand, we have observed numerous examples of lexicase selection rewa
 \section{Measuring hyperselection}
 \label{section:experiments}
 
-\todo[inline]{It's possible that lack of hyperselection is generally higher in successful runs. Can we easily split the numbers according to whether a run was successful or not? -- Nic
-
-Tom: Done. Data is in Discourse. Do we want to report this at all? I'm ambivalent.
-}
-
 To empirically measure hyperselection, we gathered data from genetic programming runs using lexicase selection and tournament selection with size 7 tournaments. We tested each selection method on nine problems chosen from a recent general program synthesis benchmark suite~\cite{Helmuth:2015:GECCO}, a subset exhibiting a range of problem requirements and difficulties. We conducted 100 runs for each problem and parameter combination. We used PushGP \cite{spector:2002:GPEM, 1068292}, a stack-based genetic programming system, for these experiments since it supports a variety of control structures and multiple data types, making it a good choice for program synthesis tasks. Lexicase selection has also been shown to be effective in tree-based genetic programming \cite{Helmuth:2014:ieeeTEC, Krawiec:2015:GECCO:smgpWorkshop}.
 
 We then calculated the average number of hyperselected individuals at the 1\%, 5\%, and 10\% levels per generation, which we present in the first three major columns of Table~\ref{table:slt-hyperselection}. On all problems except one, lexicase selection hyperselects 5 or more individuals per generation on average at the 1\% level; tournament selection averages less than one per generation on all problems, though always greater than 0.2. Unsurprisingly, tournament selection never hyperselected an individual at the 5\% or 10\% levels.
@@ -349,7 +344,31 @@ Considering that tournament selection conforms to the probability of selection g
 
 The results in Table~\ref{table:slt-hyperselection} clearly show that lexicase selection gives more of its parent selections to single individuals than tournament selection, both at low levels (1\%) and higher levels (5\% and 10\%) of hyperselection. This indicates that lexicase selection more often concentrates its selection pressure on single individuals or small groups of individuals than tournament selection, increasing its exploitation of the individuals it selects most often. This data does not indicate whether lexicase selection is hyperselecting the same individuals that tournament selection ranks highest (those with best total error), or if it actually selects individuals that would receive few or no selections with tournament selection.
 
-In Section \ref{section:lexicase} we referenced results that show genetic programming with lexicase selection significantly outperforms genetic programming with tournament selection across many benchmark problems. We have now observed that lexicase selection often concentrates selection pressure into small numbers of individuals. This raises important questions: can we attribute lexicase selection's success to its ability to concentrate selection in hyperselection events? Or, is it more important that lexicase selects different individuals than tournament selection, in some sense the ``right'' individuals to drive evolution toward a solution? We will investigate these questions in Section~\ref{section:HyperSelectionandLexicasePerformance}.
+In Section~\ref{section:lexicase} we referenced results that show genetic programming with lexicase selection significantly outperforms genetic programming with tournament selection across many benchmark problems. We have now observed that lexicase selection often concentrates selection pressure into small numbers of individuals. This then raises the question of whether there is a relationship between the rates of hyperselection in the lexicase runs and whether those runs were successful or not.
+
+Table~\ref{table:lexicase-hyperselection-success} shows the average number of hyperselected individuals for the lexicase runs of five of the nine benchmark problems,\footnote{These five benchmark problems were chosen in~\cite{Helmuth:2015:GPTP} to represent a variety of success rates and problem types.} seperated into the successful and unsuccessful runs. While there aren't major differences in the numbers at the 1\% level, the average number of hyperselected individuals at the 5\% and 10\% leves are often several times higher in the successful runs than in the unsuccessful runs. In the X-Word Lines problem, for example, the average number of hyperselections at the 5\% level for the successful runs was 0.47, over five times the rate for the unsuccessful runs (0.09), and the 10\% rate (0.22) was over 10 times the rate for the unsuccessful runs (0.02).
+
+\begin{table*}[t]
+	\centering
+	\caption{
+		Average number of hyperselected individuals at the 1\%, 5\%, and 10\% per generation for lexicase selection for five of the nine benchmark problems, broken out into successful and unsuccessful runs.
+	}
+	\label{table:lexicase-hyperselection-success}
+	\rowcolors{3}{white}{light-gray}
+	\begin{tabu} to \textwidth {l | rrr | rrr | rrr}
+		\toprule
+		& \multicolumn{3}{c|}{\textbf{Successful}} & \multicolumn{3}{c|}{\textbf{Unsuccessful}} \\
+		\textbf{Problem} & \textbf{1\%}  & \textbf{5\%}  & \textbf{10\%}  & \textbf{1\%}      & \textbf{5\%}      & \textbf{10\%}  \\
+		\midrule
+		Count Odds                 & 0.84  & 0.07 & 0.02 & 0.47 & 0.01 & 0.00 \\
+		Double Letters             & 11.88  & 0.72 & 0.28 & 12.29 & 0.28 & 0.08 \\
+		Mirror Image               & 9.32  & 0.27 & 0.06 & 10.49 & 0.15 & 0.04 \\
+		Vector Average             & 8.35  & 0.05 & 0.02 & 6.78 & 0.02 & 0.00 \\
+		X-Word Lines               & 5.43  & 0.47 & 0.22 & 5.29 & 0.09 & 0.02 \\
+	\end{tabu}
+\end{table*}
+
+This raises important questions: can we attribute lexicase selection's success to its ability to concentrate selection in hyperselection events? Or, is it more important that lexicase selects different individuals than tournament selection, in some sense the ``right'' individuals to drive evolution toward a solution? We investigate these questions in Section~\ref{section:HyperSelectionandLexicasePerformance}.
 
 %-----------------------------------------------------------
 %@@
@@ -357,7 +376,9 @@ In Section \ref{section:lexicase} we referenced results that show genetic progra
 \section{Hyperselection and Lexicase\\Performance}
 \label{section:HyperSelectionandLexicasePerformance}
 
-In Section~\ref{section:experiments} we saw that lexicase selection often ends up selecting the same individual many times in one generation, much more often than tournament selection does. This leads to the question of whether the hyperselections observed in lexicase selection runs are important in driving evolution toward solutions, or if they are simply a side effect of lexicase's algorithm. The alternative is that the individuals that lexicase selection selects the most often are simply different from those that tournament selection selects most often, in particular those with poor total error. In this section we test the hypothesis that the hyperselections we observed in runs using lexicase are integral to its success, and that without these extreme exploitative events, lexicase selection would perform significantly worse than it does with them.
+In Section~\ref{section:experiments} we saw that lexicase selection often ends up selecting the same individual many times in one generation, much more often than tournament selection does. 
+
+This leads to the question of whether the hyperselections observed in lexicase selection runs are important in driving evolution toward solutions, or if they are simply a side effect of lexicase's algorithm. The alternative is that the individuals that lexicase selection selects the most often are simply different from those that tournament selection selects most often, in particular those with poor total error. In this section we test the hypothesis that the hyperselections we observed in runs using lexicase are integral to its success, and that without these extreme exploitative events, lexicase selection would perform significantly worse than it does with them.
 
 To test this hypothesis, we designed a new parent selection algorithm that selects the same individuals most often that lexicase does, but has hyperselection characteristics much closer to tournament selection. The new algorithm, \definition{sampled lexicase-tournament selection} (SLT), starts by sampling the population, which only happens once per generation before selecting any parents. We sample $k$ individuals from the population by running the lexicase selection algorithm and tracking how often each individual is selected. In this work we set $k = 2P$, where $P$ is the population size (set to 1000 in our runs), guaranteeing at least as many samples as the number of parents that will be selected in that generation\footnote{We observe around 1700 parent selections per generation on average, which varies since we randomly select genetic operators, and some operators require one parent where others require two. This means that at most, 2000 parents could be selected in a generation.}. We then use the number of samples each individual received to rank the population from best (most samples) to worst (least samples). Next, every time we need to select a parent, we conduct a tournament, where the winner of the tournament is based on the lexicase-sampled ranking instead of total error. In this experiment we used size 7 tournaments, just like we did with tournament selection in our experiments.
 
