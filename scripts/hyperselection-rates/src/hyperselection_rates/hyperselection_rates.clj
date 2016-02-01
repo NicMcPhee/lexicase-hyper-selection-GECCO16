@@ -57,14 +57,23 @@
 
 (time (prob-exactly-one-hyperselection 1000 7 1700 0.01))
 
-(defn prob-exactly-two-hyperselections
-  [population-size tournament-size num-selections percent-level]
-  (let [probs (map (partial probability-of-hyperselection population-size tournament-size num-selections percent-level)
-                   (range 1 (inc population-size)))]
+(combo/combinations (range 10) 3)
+
+; The use of filter here is a total hack to remove things with probabilities
+; that I'm hoping are small enough that they won't matter in the grand scheme
+; of things.
+(defn prob-exactly-k-hyperselections
+  [population-size tournament-size num-selections percent-level k]
+  (let [probs (filter #(> % 0.001)
+                      (map (partial probability-of-hyperselection population-size tournament-size num-selections percent-level)
+                           (range 1 (inc population-size))))
+        prob-no-hyperselections (reduce * (map #(- 1 %) probs))]
     (reduce
      +
-     (for [i (range (dec (count probs)))
-           :let [[start end] (split-at i probs)
-                 p (first end)
-                 others (concat start (rest end))]]
-       (* p (reduce * (map #(- 1 %) others)))))))
+     (for [group (combo/combinations probs k)]
+       (/ (* (reduce * group) prob-no-hyperselections)
+          (reduce * (map #(- 1 %) group)))))))
+
+(time (prob-exactly-k-hyperselections 1000 7 1700 0.01 6))
+
+(+ 0.26 (* 0.28 2) (* 0.19 3) (* 0.095 4) (* 0.037 5))
