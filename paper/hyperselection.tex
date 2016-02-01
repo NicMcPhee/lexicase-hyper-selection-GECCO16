@@ -300,7 +300,10 @@ On the other hand, we have observed numerous examples of lexicase selection rewa
 \section{Experimental setup}
 \label{section:experiments}
 
-\todo[inline]{It's possible that lack of hyperselection is generally higher in successful runs. Can we easily split the numbers according to whether a run was successful or not? -- Nic}
+\todo[inline]{It's possible that lack of hyperselection is generally higher in successful runs. Can we easily split the numbers according to whether a run was successful or not? -- Nic
+
+Tom: Done. Data is in Discourse. Do we want to report this at all? I'm ambivalent.
+}
 
 To measure hyperselection, we gathered data from using lexicase selection and tournament selection with size 7 tournaments on nine benchmark problems from~\cite{Helmuth:2015:GECCO, Helmuth:2015:dissertation}, a subset chosen to exhibit a range of problem requirements and difficulties.
 We then calculated the average number of hyper-selected individuals at the 1\%, 5\%, and 10\% levels per generation, which we present in the first three major columns of Table~\ref{table:slt-hyperselection}. On all problems except one, lexicase selection hyper-selects 5 or more individuals per generation on average at the 1\% level; tournament selection averages less than one per generation on all problems, though always greater than 0.2. Unsurprisingly, tournament selection never hyper-selected an individual at the 5\% or 10\% levels.
@@ -308,7 +311,10 @@ On 7 of the 9 problems, lexicase selection hyper-selected one individual at the 
 
 The Vector Average and Count Odds problems showed much lower levels of hyperselection with lexicase selection, especially at the 5\% and 10\% levels, indicating that selecting a single individual to parent many of the children in a single generation was rarer on those problems. These two problems were also among the least-solved problems in this subset of the benchmark problems; one hypothesis is that most of the genetic programming runs had trouble getting any traction on these problems, leading to more homogeneous populations and fewer hyperselection events than on other problems.
 
-\todo[inline]{We could probably check the hypothesis in the last sentence if we wanted to.}
+\todo[inline]{We could probably check the hypothesis in the last sentence if we wanted to.
+
+Tom: I'm not sure how we would do this. Any ideas Nic?
+}
 
 Considering that tournament selection conforms to the probability of selection given in Equation~\ref{tourneyProbEquation} regardless of problem, it is at first surprising that its hyperselections at the 1\% level vary as much as they do across problems. This difference is likely explained by how often tied individuals appear near the top of the rankings for different problems, since Equation~\ref{tourneyProbEquation} does not strictly hold in the presence of ties. Intuitively, if many individuals tie for the best rank, they will each win fewer tournaments than a single best individual would, since ties in tournaments are broken randomly. Therefore, lower hyperselection for tournament selection on a problem likely indicates that ties happened more often on those problems, which we have observed anecdotally in a few runs.
 
@@ -384,6 +390,8 @@ X-Word Lines               & \underline{8}        & 0          & 4   \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\todo[inline]{TOM IS CURRENTLY WORKING ON THE NEXT 2 ORANGE BUBBLES ABOUT DIVERSITY :D}
 
 \todo[inline]{Should we just drop this next paragraph? -- Nic\\ Tom: I don't think so -- I think it's worth mentioning that the diversity is similar. If it were different, it could be a reason to prefer one or the other even though it didn't affect success rates on these problems, since different diversity might be important on other problems. In fact, if we have room, it might be worthwhile to insert one or two diversity plots here.
 	
