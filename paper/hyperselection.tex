@@ -385,9 +385,8 @@ This raises important questions: can we attribute lexicase selection's success t
 \section{Hyperselection and Lexicase\\Performance}
 \label{section:HyperSelectionandLexicasePerformance}
 
-In Section~\ref{section:experiments} we saw that lexicase selection often ends up selecting the same individual many times in one generation, much more often than tournament selection does. 
-
-This leads to the question of whether the hyperselections observed in lexicase selection runs are important in driving evolution toward solutions, or if they are simply a side effect of lexicase's algorithm. The alternative is that the individuals that lexicase selection selects the most often are simply different from those that tournament selection selects most often, in particular those with poor total error. In this section we test the hypothesis that the hyperselections we observed in runs using lexicase are integral to its success, and that without these extreme exploitative events, lexicase selection would perform significantly worse than it does with them.
+In Section~\ref{section:experiments} we saw that lexicase selection often ends up selecting the same individual many times in one generation, much more often than tournament selection does. This leads to the question of whether the hyperselections observed in lexicase selection runs are important in driving evolution toward solutions. %, or if they are simply a side effect of lexicase's algorithm.
+The alternative is that the individuals that lexicase selects the most often are simply different from those that tournament selection selects most often, in particular those with poor total error. In this section we test the hypothesis that the hyperselections we observed in runs using lexicase are integral to its success, and that without these extreme exploitative events, lexicase selection would perform significantly worse than it does with them.
 
 To test this hypothesis, we designed a new parent selection algorithm that selects the same individuals most often that lexicase does, but has hyperselection characteristics much closer to tournament selection. The new algorithm, \definition{sampled lexicase-tournament selection} (SLT), starts by sampling the population, which only happens once per generation before selecting any parents. We sample $k$ individuals from the population by running the lexicase selection algorithm and tracking how often each individual is selected. In this work we set $k = 2P$, where $P$ is the population size (set to 1000 in our runs), guaranteeing at least as many samples as the number of parents that will be selected in that generation\footnote{We observe around 1700 parent selections per generation on average, which varies since we randomly select genetic operators, and some operators require one parent where others require two. This means that at most, 2000 parents could be selected in a generation.}. We then use the number of samples each individual received to rank the population from best (most samples) to worst (least samples). Next, every time we need to select a parent, we conduct a tournament, where the winner of the tournament is based on the lexicase-sampled ranking instead of total error. In this experiment we used size 7 tournaments, just like we did with tournament selection in our experiments.
 
@@ -396,14 +395,13 @@ SLT gives the highest probabilities of selection to those individuals that lexic
 
 We conducted 100 runs of PushGP using SLT on the same 9 benchmark problems; the hyperselection results for SLT are also included in Table~\ref{table:slt-hyperselection}. The first thing to note is that SLT has higher hyperselection at the 1\% level than tournament selection. Theoretically, we would expect SLT to behave similarly to tournament selection if neither had ties in rank within the population. We believe the differences we see here are a product of ties in total error when using tournament selection, especially near the top of the rankings. The relative consistency of SLT's 1\%-level hyperselection likely comes from the fact that it rarely had large numbers of tied individuals near the top of the rankings---we expect that tournament selection without ranking ties would also average around 1.55 hyperselections at the 1\% level per generation.
 
-In these runs, SLT usually had lower hyperselection at the 1\% level than lexicase selection, and always lower at the 5\% and 10\% levels, on which it never had a non-zero result. Since SLT was designed to have similar hyperselection characteristics as tournament selection, it is unsurprising that it received no hyperselections at the upper levels. This means that SLT succeeds in our goal of creating a lexicase-based selection mechanism that never puts as much as 5\% of the parent selections in a generation on a single individual. This contrasts with lexicase selection, which often selects single individuals to make large numbers of the children for the next generation.
+\todo[inline]{Tom: The above paragraph is where it would make sense to insert Nic's findings about simulations of expected 1\% hyperselections with tournament. Some of the sentences will have to be changed to reflect this data.}
 
-Since we have shown that SLT has similar hyperselection characteristics to tournament selection, let us now examine its performance results in these runs, which we present in Table~\ref{table:slt-results}. Across these 9 problems, SLT shows very similar performance to lexicase selection, and better performance than tournament selection on every problem. Both SLT and lexicase found at least one solution on each of the 9 problems, where tournament selection only found solutions to 6 of the problems. Comparing these methods using a chi-square test with the Holm correction, SLT never has a significantly different success rate compared to lexicase selection. SLT is significantly better than tournament selection on the same problems as lexicase except for Count Odds and X-Word Lines, on which it achieved fewer than the 8 successes necessary to be significantly better than tournament.
- SLT seems to slightly outperform lexicase selection on the easier problems where both find more solutions, and lexicase selection slightly outperforms SLT on the more difficult problems where both find fewer solutions, though the difference is never significant.
+In these runs, SLT usually had lower hyperselection at the 1\% level than lexicase selection, and always lower at the 5\% and 10\% levels, on which it never had a non-zero result. Since SLT was designed to have similar hyperselection characteristics as tournament selection, it is unsurprising that it received no hyperselections at the upper levels. This means that SLT succeeds in our goal of creating a lexicase-based selection mechanism that never puts as much as 5\% of the parent selections in a generation on a single individual. This contrasts with lexicase selection, which often selects single individuals to make large numbers of the children for the next generation.
 
 \begin{table}[t]
 \centering
-\caption{Number of successful runs out of 100 for each setting on each problem. For each problem, \underline{underline}~indicates significant improvement over tournament selection using a pairwise chi-squared test with Holm correction and 0.05 significance level. SLT and lexicase selection never have significantly different success rates.}
+\caption{Number of successful runs out of 100 for each parent selection method on each problem. For each problem, \underline{underline}~indicates significant improvement over tournament selection using a pairwise chi-squared test with Holm correction and 0.05 significance level. SLT and lexicase selection never have significantly different success rates.}
 \label{table:slt-results}
 \rowcolors{2}{light-gray}{white}
 \begin{tabular}{lrrr}
@@ -423,24 +421,26 @@ X-Word Lines               & \underline{8}        & 0          & 4   \\
 \end{tabular}
 \end{table}
 
+Since we have shown that SLT has similar hyperselection characteristics to tournament selection, let us now examine its performance results in these runs, which we present in Table~\ref{table:slt-results}. Across these 9 problems, SLT shows very similar performance to lexicase selection, and better performance than tournament selection on every problem. Both SLT and lexicase found at least one solution on each of the 9 problems, where tournament selection only found solutions to 6 of the problems. Comparing these methods using a chi-square test with the Holm correction, SLT never has a significantly different success rate compared to lexicase selection. SLT is significantly better than tournament selection on 5 of the 7 problems on which lexicase is, and is additionally significantly better on one other problem.
+ SLT seems to slightly outperform lexicase selection on the easier problems where both find more solutions, and lexicase selection slightly outperforms SLT on the more difficult problems where both find fewer solutions, though the difference is never significant.
 
 Since previous work has shown lexicase selection's ability to maintain higher levels of population diversity than other methods~\cite{Helmuth:2015:GPTP}, we were interested to see if SLT also shares this characteristic, or if hyperselection when using lexicase raises (or even lowers) diversity. We plotted the error diversity---the number of unique error vectors in the population---for three representative problems in Figures \ref{fig:dl-div}, \ref{fig:rswn-div}, and \ref{fig:syllables-div}. Each of these figures plots the median and quartiles for error diversity across 100 runs. Interestingly, the diversity plots for SLT are very similar to those of lexicase selection. Thus, even though the techniques produce significantly different hyperselection rates, their populations still maintain similar abilities to search widely.
 
-\begin{figure}[h] %[t] sets the image at the top of the page; t = top, b = bottom, h = here%
+\begin{figure}[t] %[t] sets the image at the top of the page; t = top, b = bottom, h = here%
 \centering
 \includegraphics[width=\linewidth]{double-letters-div.pdf}
 \caption{Error diversity for the Double Letters problem.}
 \label{fig:dl-div}
 \end{figure}
 
-\begin{figure}[h] %[t] sets the image at the top of the page; t = top, b = bottom, h = here%
+\begin{figure}[t] %[t] sets the image at the top of the page; t = top, b = bottom, h = here%
 \centering
 \includegraphics[width=\linewidth]{rswn-div.pdf}
 \caption{Error diversity for the Replace Space With Newline problem.}
 \label{fig:rswn-div}
 \end{figure}
 
-\begin{figure}[h] %[t] sets the image at the top of the page; t = top, b = bottom, h = here%
+\begin{figure}[t] %[t] sets the image at the top of the page; t = top, b = bottom, h = here%
 \centering
 \includegraphics[width=\linewidth]{syllables-div.pdf}
 \caption{Error diversity for the Syllables problem.}
@@ -448,7 +448,7 @@ Since previous work has shown lexicase selection's ability to maintain higher le
 \end{figure}
 
 
-These results show that even though SLT has much lower hyperselection characteristics than lexicase selection, never selecting a single individual to parent more than 5\% of the children in a generation, it nevertheless maintains the problem-solving performance and diversity levels shown by lexicase selection. These results give strong evidence against the hypothesis that lexicase selection's increased exploitation of hyperselected individuals is important in its ability to outperform tournament selection with and without implicit fitness sharing. Instead, this suggests that it is more important \textit{which} individuals lexicase selection selects most often, which it has in common with SLT but not tournament selection.
+These results show that even though SLT has much lower hyperselection characteristics than lexicase selection, never selecting a single individual to parent more than 5\% of the children in a generation, it nevertheless exhibits the problem-solving performance and diversity levels shown by lexicase selection. These results give strong evidence against the hypothesis that lexicase selection's increased exploitation of hyperselected individuals is important in its ability to outperform tournament selection with and without implicit fitness sharing. Instead, this suggests that it is more important \textit{which} individuals lexicase selection selects most often, which it has in common with SLT but not tournament selection.
 
 While SLT achieved similar performance to lexicase selection in this experiment, it does not otherwise indicate that it would make a better parent selection mechanism. Notably, it will perform slightly slower than lexicase selection in practice, since it performs both lexicase sampling and then tournaments for selection. Even so, it may merit further examination on other types of problems to see if it behaves differently in other settings.
 
