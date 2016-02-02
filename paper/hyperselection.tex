@@ -304,7 +304,33 @@ On the other hand, we have observed numerous examples of lexicase selection rewa
 \section{Measuring hyperselection}
 \label{section:experiments}
 
-To empirically measure hyperselection, we gathered data from genetic programming runs using lexicase selection and tournament selection with size 7 tournaments. We tested each selection method on nine problems chosen from a recent general program synthesis benchmark suite~\cite{Helmuth:2015:GECCO}, a subset exhibiting a range of problem requirements and difficulties. We conducted 100 runs for each problem and parameter combination. We used PushGP \cite{spector:2002:GPEM, 1068292}, a stack-based genetic programming system, for these experiments since it supports a variety of control structures and multiple data types, making it a good choice for program synthesis tasks\footnote{Lexicase selection has also been shown to be effective in tree-based genetic programming \cite{Helmuth:2014:ieeeTEC, Krawiec:2015:GECCO:smgpWorkshop}.}.
+\begin{table*}[t]
+	\centering
+	\caption{Problems used in our experiments. The instruction set used for each problem included all instructions included in PushGP that make use of the data types listed in the third column. Any problem with ``print'' listed as a data type requires the program to print the result to standard output. All problems also used instructions making use of Push's exec stack, which allow for a variety of control flow structures such as conditionals, recursion, and iteration.}
+	\label{table:problems}
+%	\rowcolors{3}{white}{light-gray}
+	\taburowcolors[2] 2{white .. light-gray}
+	\begin{tabu} to \textwidth {X[1.1,l] X[5,l] X[2.1,l]}
+		\toprule
+		\textbf{Problem} & \textbf{Description}  & \textbf{Data Types} \\
+		\midrule
+		Count Odds                 & Given a vector of integers, return the number of integers that are odd, without use of a specific \texttt{even} or \texttt{odd} instruction. & integer, boolean, vector of integers \\
+		Double Letters             & Given a string, print the string, doubling every letter character, and tripling every exclamation point. All other non-alphabetic and non-exclamation characters should be printed a single time each. & integer, boolean, char, string, print \\
+		Mirror Image               & Given two vectors of integers, return \texttt{true} if one vector is the reverse of the other, and \texttt{false} otherwise. & integer, boolean, vector of integers \\
+		Negative To Zero           & Given a vector of integers, return the vector where all negative integers have been replaced by 0. & integer, boolean, vector of integers \\
+		Replace Space with Newline & Given a string input, print the string, replacing spaces with newlines. Also, return the integer count of the non-whitespace characters. & integer, boolean, char, string, print \\
+		String Lengths Backwards   & Given a vector of strings, print the length of each string in the vector starting with the last and ending with the first, each on a separate line. & integer, boolean, char, string, vector of strings, print \\
+		Syllables                  & Given a string containing symbols, spaces, digits, and lowercase letters, count the number of occurrences of vowels (a, e, i, o, u, y) in the string and print that number as $X$ in \texttt{The number of syllables is X}. & integer, boolean, char, string, print \\
+		Vector Average             & Given a vector of floats, return the average of those floats. Results are rounded to 4 decimal places. & integer, float, vector of floats \\
+		X-Word Lines               & Given an integer $X$  and a string that can contain spaces and newlines, print the string with exactly $X$ words per line. The last line may have fewer than $X$ words. & integer, boolean, char, string, print \\
+		\bottomrule
+	\end{tabu}
+\end{table*}
+
+
+To empirically measure hyperselection, we gathered data from genetic programming runs using lexicase selection and tournament selection with size 7 tournaments. We tested each selection method on nine problems chosen from a recent general program synthesis benchmark suite~\cite{Helmuth:2015:GECCO}, a subset exhibiting a range of problem requirements and difficulties---see Table~\ref{table:problems} for details. These problems, taken from introductory computer science textbooks, mimic the types of programming expected of humans writing software. We conducted 100 runs for each problem/parameter combination.
+
+We used PushGP \cite{spector:2002:GPEM, 1068292}, a stack-based genetic programming system, for these experiments since it supports a variety of control structures and multiple data types, making it a good choice for program synthesis tasks\footnote{Lexicase selection has also been shown to be effective in tree-based genetic programming \cite{Helmuth:2014:ieeeTEC, Krawiec:2015:GECCO:smgpWorkshop}.}. SOMETHING ABOUT PUSHGP PARAMETERS HERE
 
 \begin{table*}[t]
 	\centering
@@ -354,7 +380,12 @@ To empirically measure hyperselection, we gathered data from genetic programming
 	\end{tabu}
 \end{table*}
 
-We then calculated the average number of hyperselected individuals at the 1\%, 5\%, and 10\% levels per generation, which we present in the first three major columns of Table~\ref{table:slt-hyperselection}. On all problems except one, lexicase selection hyperselects 5 or more individuals per generation on average at the 1\% level; tournament selection averages less than one per generation on all problems, though always greater than 0.2. Unsurprisingly, tournament selection never hyperselected an individual at the 5\% or 10\% levels.
+
+
+
+
+
+To track hyperselection, we calculated the average number of hyperselected individuals at the 1\%, 5\%, and 10\% levels per generation, which we present in the first three major columns of Table~\ref{table:slt-hyperselection}. On all problems except one, lexicase selection hyperselects 5 or more individuals per generation on average at the 1\% level; tournament selection averages less than one per generation on all problems, though always greater than 0.2. Unsurprisingly, tournament selection never hyperselected an individual at the 5\% or 10\% levels.
 On 7 of the 9 problems, lexicase selection hyperselected one individual at the 5\% level in every 2 to 10 generations on average, and one individual at the 10\% level every 4 to 25 generations on average.
 
 \todo[inline]{Tom: The last sentence here seems really obfuscated. I should know, I wrote it. Any ideas about conveying the same info without being confusing?}
