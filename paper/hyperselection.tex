@@ -331,9 +331,36 @@ On the other hand, we have observed numerous examples of lexicase selection rewa
 \end{table*}
 
 
-To empirically measure hyperselection, we gathered data from genetic programming runs using lexicase selection and tournament selection with size 7 tournaments. We tested each selection method on nine problems chosen from a recent general program synthesis benchmark suite~\cite{Helmuth:2015:GECCO}, a subset exhibiting a range of problem requirements and difficulties---see Table~\ref{table:problems} for details. These problems, taken from introductory computer science textbooks, mimic the types of programming expected of humans writing software. We conducted 100 runs for each problem/parameter combination.
+To empirically measure hyperselection, we gathered data from genetic programming runs using lexicase selection and tournament selection with size 7 tournaments. We tested each selection method on nine problems chosen from a recent general program synthesis benchmark suite~\cite{Helmuth:2015:GECCO}, a subset exhibiting a range of problem requirements and difficulties---see Table~\ref{table:problems} for details. These problems, taken from introductory computer science textbooks, mimic the types of programming expected of humans writing software.
 
-For our experiments we used PushGP \cite{spector:2002:GPEM, 1068292}, a stack-based genetic programming system, since it supports a variety of control structures and multiple data types, making it a good choice for program synthesis tasks\footnote{Lexicase selection has also been shown to be effective in tree-based genetic programming \cite{Helmuth:2014:ieeeTEC, Krawiec:2015:GECCO:smgpWorkshop}.}. SOMETHING ABOUT PUSHGP PARAMETERS HERE
+\begin{table}[t]
+\centering
+\caption{The PushGP parameters used in our experiments.}
+\label{table:parameters}
+%\rowcolors{3}{Gray}{white}
+\begin{tabular}{l r}
+\toprule
+\textbf{Parameter} & \textbf{Value} \tabularnewline
+\midrule
+runs per problem/parameter combination & 100 \tabularnewline
+population size & 1000 \tabularnewline
+maximum generations & 300 \tabularnewline
+%alternation rate & 0.01 \tabularnewline
+%alignment deviation & 10 \tabularnewline
+%uniform mutation rate & 0.01 \tabularnewline
+%uniform close mutation rate & 0.1 \tabularnewline
+\midrule
+\textbf{Genetic Operator} & \textbf{Prob} \tabularnewline
+\midrule
+alternation & 0.2 \tabularnewline
+uniform mutation & 0.2 \tabularnewline
+uniform close mutation & 0.1 \tabularnewline
+alternation followed by uniform mutation & 0.5 \tabularnewline
+\bottomrule
+\end{tabular}
+\end{table}
+
+For our experiments we used PushGP \cite{spector:2002:GPEM, 1068292}, a stack-based genetic programming system\footnote{Lexicase selection has also been shown to be effective in tree-based genetic programming \cite{Helmuth:2014:ieeeTEC, Krawiec:2015:GECCO:smgpWorkshop}.}. PushGP supports a variety of control structures and multiple data types, making it a good choice for program synthesis tasks. The PushGP parameters used in these experiments are the same as those reported in \cite{Helmuth:2015:dissertation}; Table~\ref{table:parameters} presents the most relevant parameters. Note in particular that these runs use linear genomes that are later translated into Push programs, as described in \cite{Helmuth:2015:dissertation}. We use a variety of genetic operators on these linear genomes, including alternation, a linear crossover operator modeled after ULTRA \cite{Spector:2013:GPTP}; uniform mutation, which replaces each instruction with some probability; uniform close mutation, which probabilistically adds or removes parentheses; and alternation followed by uniform mutation.
 
 \begin{table*}[t]
 	\centering
