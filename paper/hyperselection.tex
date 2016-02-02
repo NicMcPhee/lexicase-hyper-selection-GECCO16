@@ -306,7 +306,7 @@ On the other hand, we have observed numerous examples of lexicase selection rewa
 
 \begin{table*}[t]
 	\centering
-	\caption{Problems used in our experiments. The instruction set used for each problem included all instructions included in PushGP that make use of the data types listed in the third column. Any problem with ``print'' listed as a data type requires the program to print the result to standard output. All problems also used instructions making use of Push's exec stack, which allow for a variety of control flow structures such as conditionals, recursion, and iteration.}
+	\caption{Problems used in our experiments. The instruction set used for each problem included all instructions included in PushGP that make use of the data types listed in the third column. Any problem with ``print'' listed as a data type requires the program to print the result to standard output. All problems also used instructions making use of Push's exec stack, which allow for a variety of control flow structures such as conditionals, recursion, and iteration. See the benchmark suite description for more details~\cite{Helmuth:2015:GECCO}.}
 	\label{table:problems}
 %	\rowcolors{3}{white}{light-gray}
 	\taburowcolors[2] 2{white .. light-gray}
@@ -330,7 +330,7 @@ On the other hand, we have observed numerous examples of lexicase selection rewa
 
 To empirically measure hyperselection, we gathered data from genetic programming runs using lexicase selection and tournament selection with size 7 tournaments. We tested each selection method on nine problems chosen from a recent general program synthesis benchmark suite~\cite{Helmuth:2015:GECCO}, a subset exhibiting a range of problem requirements and difficulties---see Table~\ref{table:problems} for details. These problems, taken from introductory computer science textbooks, mimic the types of programming expected of humans writing software. We conducted 100 runs for each problem/parameter combination.
 
-We used PushGP \cite{spector:2002:GPEM, 1068292}, a stack-based genetic programming system, for these experiments since it supports a variety of control structures and multiple data types, making it a good choice for program synthesis tasks\footnote{Lexicase selection has also been shown to be effective in tree-based genetic programming \cite{Helmuth:2014:ieeeTEC, Krawiec:2015:GECCO:smgpWorkshop}.}. SOMETHING ABOUT PUSHGP PARAMETERS HERE
+For our experiments we used PushGP \cite{spector:2002:GPEM, 1068292}, a stack-based genetic programming system, since it supports a variety of control structures and multiple data types, making it a good choice for program synthesis tasks\footnote{Lexicase selection has also been shown to be effective in tree-based genetic programming \cite{Helmuth:2014:ieeeTEC, Krawiec:2015:GECCO:smgpWorkshop}.}. SOMETHING ABOUT PUSHGP PARAMETERS HERE
 
 \begin{table*}[t]
 	\centering
