@@ -45,7 +45,7 @@
 	title = {Lexicase selection for program synthesis: a diversity analysis},
 	booktitle = {Genetic Programming Theory and Practice XIII},
 	date = {2015},
-	editor = {?},
+	NOeditor = {?},
 	series = {Genetic and Evolutionary Computation},
 	publisher = {Springer},
 	pubstate = {In press}
@@ -270,6 +270,64 @@
 	notes =	"Also known as \cite{2466814} Distributed at
 	GECCO-2013.",
 	doi-url =	"http://dx.doi.org/10.1145/2464576.2466814",
+}
+
+@InCollection{Spector:2013:GPTP,
+  author =	"Lee Spector and Thomas Helmuth",
+  title =	"Uniform Linear Transformation with Repair and
+		 Alternation in Genetic Programming",
+  booktitle =	"Genetic Programming Theory and Practice XI",
+  year = 	"2013",
+  series =	"Genetic and Evolutionary Computation",
+  editor =	"Rick Riolo and Jason H. Moore and Mark Kotanchek",
+  publisher =	"Springer",
+  chapter =	"8",
+  pages =	"137--153",
+  address =	"Ann Arbor, USA",
+  month =	"9-11 " # may,
+  keywords =	"genetic algorithms, genetic programming, Uniform
+		 mutation, Uniform crossover, ULTRA, Push, PushGP, Drug
+		 bioavailability problem, Pagie-1 problem, Factorial
+		 regression, Boolean multiplexer problem",
+  isbn13 =	"978-1-4939-0374-0",
+  doi =  	"doi:10.1007/978-1-4939-0375-7_8",
+  abstract =	"Several genetic programming researchers have argued
+		 for the utility of genetic operators that act
+		 uniformly. By act uniformly we mean two specific
+		 things: that the probability of an inherited program
+		 component being modified during inheritance is
+		 independent of the size and shape of the parent
+		 programs beyond the component in question; and that
+		 pairs of parents are combined in ways that allow
+		 arbitrary combinations of components from each parent
+		 to appear in the child. Uniform operators described in
+		 previous work have had limited utility, however,
+		 because of a mismatch between the relevant notions of
+		 uniformity and the hierarchical structure and variable
+		 sizes of many genetic programming representations. In
+		 this chapter we describe a new genetic operator, ULTRA,
+		 which incorporates aspects of both mutation and
+		 crossover and acts approximately uniformly across
+		 programs of variable sizes and structures. ULTRA treats
+		 hierarchical programs as linear sequences and includes
+		 a repair step to ensure that syntax constraints are
+		 satisfied after variation. We show that on the drug
+		 bioavailability and Pagie-1 benchmark problems ULTRA
+		 produces significant improvements both in
+		 problem-solving power and in program size relative to
+		 standard operators. Experiments with factorial
+		 regression and with the Boolean 6-multiplexer problem
+		 demonstrate that ULTRA can manipulate programs that
+		 make use of hierarchical structure, but also that it is
+		 not always beneficial. The demonstrations evolve
+		 programs in the Push programming language, which makes
+		 repair particularly simple, but versions of the
+		 technique should be applicable in other genetic
+		 programming systems as well.",
+  notes =	"http://cscs.umich.edu/gptp-workshops/ Part of
+		 \cite{Riolo:2013:GPTP} published after the workshop in
+		 2013",
+  doi-url =	"http://dx.doi.org/10.1007/978-1-4939-0375-7_8",
 }
 
 @InProceedings{Spector:2012:GECCOcompANEW,
