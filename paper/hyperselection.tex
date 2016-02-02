@@ -170,7 +170,7 @@ Author omitted\\
 \maketitle
 \begin{abstract}
 
-Lexicase selection is a parent selection method that can improve the problem solving power of genetic programming. Previous work has shown that it can also produce \emph{hyperselection} events, in which a single individual is selected many more times than is possible under other selection methods. Here we investigate the role that hyperselection plays in the problem-solving performance of lexicase selection. We conduct runs of genetic programming on a set of software synthesis benchmark problems using lexicase and tournament selection, confirming that hyperselection occurs only with the former, which also performs significantly better. We then introduce a new \emph{sampled lexicase-tournament selection} method, which chooses individuals from a pool produced by lexicase selection, but with frequencies similar to those of tournament selection. If hyperselection is responsible for the problem-solving performance of lexicase selection, then sampled lexicase-tournament selection should not perform as well as lexicase selection. Additional runs show that sampled lexicase-tournament selection does perform comparably to lexicase selection. We conclude that the power of lexicase selection stems from the collection of individuals that it selects, not from the unusual frequencies with which it sometimes selects them.
+Lexicase selection is a parent selection method that has been shown to improve the problem solving power of genetic programming over a range of problems. Previous work has shown that it can also produce \emph{hyperselection} events, in which a single individual is selected many more times than other individuals. Here we investigate the role that hyperselection plays in the problem-solving performance of lexicase selection. We conduct runs of genetic programming on a set of software synthesis benchmark problems using lexicase and tournament selection, confirming that hyperselection occurs significantly more often and more drastically with the former, which also performs significantly better. We then introduce a new \emph{sampled lexicase-tournament selection} method, which chooses individuals using tournament selection based on a fitness calculated by how often each individual would be selected using lexicase selection. If hyperselection is responsible for the problem-solving performance of lexicase selection, then sampled lexicase-tournament selection should not perform as well as lexicase selection. Additional runs show that sampled lexicase-tournament selection does perform comparably to lexicase selection. We conclude that the power of lexicase selection stems from the collection of individuals that it selects, not from the unusual frequencies with which it sometimes selects them.
 
 \end{abstract}
 
@@ -334,14 +334,14 @@ On 7 of the 9 problems, lexicase selection hyperselected one individual at the 5
 
 The Vector Average and Count Odds problems showed much lower levels of hyperselection with lexicase selection, especially at the 5\% and 10\% levels, indicating that selecting a single individual to parent many of the children in a single generation was rarer on those problems. These two problems were also among the least-solved problems in this subset of the benchmark problems; one hypothesis is that most of the genetic programming runs had trouble getting any traction on these problems, leading to more homogeneous populations and fewer hyperselection events than on other problems.
 
-\todo[inline]{We could probably check the hypothesis in the last sentence if we wanted to.
-
-Tom: I'm not sure how we would do this. Any ideas Nic?
-}
+%\todo[inline]{We could probably check the hypothesis in the last sentence if we wanted to.
+%
+%Tom: I'm not sure how we would do this. Any ideas Nic?
+%}
 
 Considering that tournament selection conforms to the probability of selection given in Equation~\ref{tourneyProbEquation} regardless of problem, it is at first surprising that its hyperselections at the 1\% level vary as much as they do across problems. This difference is likely explained by how often tied individuals appear near the top of the rankings for different problems, since Equation~\ref{tourneyProbEquation} does not strictly hold in the presence of ties. Intuitively, if many individuals tie for the best rank, they will each win fewer tournaments than a single best individual would, since ties in tournaments are broken randomly. Therefore, lower hyperselection for tournament selection on a problem likely indicates that ties happened more often on those problems, which we have observed anecdotally in a few runs.
 
-\todo[inline]{We could probably get data on the question in the last sentence if we wanted to.\\Tom: We could get some data, but it's not clear to me how we would present it. We'd have to do something like fit a regression line to "number of ties vs. hyper selections". Anyway, it all sounds too complicated to show a point that's nowhere close to our main goals. So, I say leave it as-is.}
+%\todo[inline]{We could probably get data on the question in the last sentence if we wanted to.\\Tom: We could get some data, but it's not clear to me how we would present it. We'd have to do something like fit a regression line to "number of ties vs. hyper selections". Anyway, it all sounds too complicated to show a point that's nowhere close to our main goals. So, I say leave it as-is.}
 
 The results in Table~\ref{table:slt-hyperselection} clearly show that lexicase selection gives more of its parent selections to single individuals than tournament selection, both at low levels (1\%) and higher levels (5\% and 10\%) of hyperselection. This indicates that lexicase selection more often concentrates its selection pressure on single individuals or small groups of individuals than tournament selection, increasing its exploitation of the individuals it selects most often. This data does not indicate whether lexicase selection is hyperselecting the same individuals that tournament selection ranks highest (those with best total error), or if it actually selects individuals that would receive few or no selections with tournament selection.
 
@@ -456,9 +456,7 @@ The experiments presented here show that the problem-solving power of lexicase s
 
 One avenue for future research is to investigate the notion of a ``specialist'' more thoroughly, to determine if, perhaps, some kinds of specialists may be more valuable than others. 
 
-Another is to investigate the connection between hyperselection and population diversity. Other work has shown that lexicase selection produces more diverse populations than tournament selection with or without implicit fitness sharing~\cite{Helmuth:2015:dissertation}, but we have not yet looked carefully at the diversity produced in the absence of hyperselection, as with sampled lexicase-tournament selection.
 
-\todo[inline]{Tom: Have we observed differences in diversity? I forget. Say something about them being worth future study. Additionally, it seems that lexicase selection might be good at rediversifying the population after a hyperselection event.}
 \todo[inline]{Tom: Here's a note I had about the above: Look at the hyperselected individuals, and what happens to the
 population diversity in the first few generations afterward an
 uber-hyperselection event. I think in run6 we saw rapid increases in
