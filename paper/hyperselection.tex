@@ -331,7 +331,7 @@ On the other hand, we have observed numerous examples of lexicase selection rewa
 \end{table*}
 
 
-To empirically measure hyperselection, we gathered data from genetic programming runs using lexicase selection and tournament selection with size 7 tournaments. We tested each selection method on nine problems chosen from a recent general program synthesis benchmark suite~\cite{Helmuth:2015:GECCO}, a subset exhibiting a range of problem requirements and difficulties---see Table~\ref{table:problems} for details. These problems, taken from introductory computer science textbooks, mimic the types of programming expected of humans writing software.
+To empirically measure hyperselection, we gathered data from genetic programming runs using lexicase selection and tournament selection with size 7 tournaments. We tested each selection method on nine problems chosen from a recent general program synthesis benchmark suite~\cite{Helmuth:2015:GECCO}, a subset exhibiting a range of problem requirements and difficulties---see Table~\ref{table:problems} for details. These problems, taken from introductory computer science homework sets, mimic the types of programming expected of humans writing software.
 
 \begin{table}[t]
 \centering
@@ -416,9 +416,7 @@ For our experiments we used PushGP \cite{spector:2002:GPEM, 1068292}, a stack-ba
 
 
 To track hyperselection, we calculated the average number of hyperselected individuals at the 1\%, 5\%, and 10\% levels per generation, which we present in the first three major columns of Table~\ref{table:slt-hyperselection}. On all problems except one, lexicase selection hyperselects 5 or more individuals per generation on average at the 1\% level; tournament selection averages less than one per generation on all problems, though always greater than 0.2. Unsurprisingly, tournament selection never hyperselected an individual at the 5\% or 10\% levels.
-On 7 of the 9 problems, lexicase selection hyperselected one individual at the 5\% level in every 2 to 10 generations on average, and one individual at the 10\% level every 4 to 25 generations on average.
-
-\todo[inline]{Tom: The last sentence here seems really obfuscated. I should know, I wrote it. Any ideas about conveying the same info without being confusing?}
+On 7 of the 9 problems, lexicase selection hyperselected one individual at the 5\% level at least once every every 10 generations on average, with some higher. On those same problems, lexicase selection hyperselected one individual at the 10\% level at least once every 25 generations on average.
 
 The Vector Average and Count Odds problems showed much lower levels of hyperselection with lexicase selection, especially at the 5\% and 10\% levels, indicating that selecting a single individual to parent many of the children in a single generation was rarer on those problems. These two problems were also among the least-solved problems in this subset of the benchmark problems (see Table~\ref{table:slt-results}); one hypothesis is that most of the genetic programming runs had trouble getting any traction on these problems, leading to more homogeneous populations and fewer hyperselection events than on other problems.
 
