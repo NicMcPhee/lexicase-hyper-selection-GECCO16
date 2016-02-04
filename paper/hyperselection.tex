@@ -313,10 +313,9 @@ On the other hand, we have observed numerous examples of lexicase selection rewa
 
 \begin{table*}[t]
 	\centering
-	\caption{Problems used in our experiments. The instruction set used for each problem included all instructions included in PushGP that make use of the data types listed in the third column. Any problem with ``print'' listed as a data type requires the program to print the result to standard output. All problems also used instructions making use of Push's exec stack, which allow for a variety of control flow structures such as conditionals, recursion, and iteration. See the benchmark suite description for more details~\cite{Helmuth:2015:GECCO}.}
+	\caption{Problems used in our experiments. The instruction set used for each problem includes all instructions available in PushGP that make use of the data types listed in the third column. Any problem with ``print'' listed as a data type requires the program to print the result to standard output. All problems also used instructions making use of Push's exec stack, which allow for a variety of control flow structures such as conditional execution, recursion, and iteration. See the benchmark suite specifications for more details~\cite{Helmuth:2015:GECCO}.}
 	\label{table:problems}
-%	\rowcolors{3}{white}{light-gray}
-	\taburowcolors[2] 2{white .. light-gray}
+	\taburowcolors[2] 2{white .. Gray}
 	\begin{tabu} to \textwidth {X[1.1,l] X[5,l] X[2.1,l]}
 		\toprule
 		\textbf{Problem} & \textbf{Description}  & \textbf{Data Types} \\
@@ -335,7 +334,7 @@ On the other hand, we have observed numerous examples of lexicase selection rewa
 \end{table*}
 
 
-To empirically measure hyperselection, we gathered data from genetic programming runs using lexicase selection and tournament selection with size 7 tournaments. We tested each selection method on nine problems, exhibiting a range of problem requirements and difficulties, from a recent general program synthesis benchmark suite~\cite{Helmuth:2015:GECCO}---see Table~\ref{table:problems} for details. These problems, taken from introductory computer science homework sets, mimic the types of programming expected of humans writing software.
+To empirically measure hyperselection, we gathered data from genetic programming runs using lexicase selection and tournament selection with size 7 tournaments. We tested each selection method on nine problems, exhibiting a range of problem requirements and difficulties, from a recent general program synthesis benchmark suite~\cite{Helmuth:2015:GECCO}; see Table~\ref{table:problems} for details. These problems, taken from introductory computer science homework sets, mimic the types of programming expected of humans writing software.
 
 \begin{table}[t]
 \centering
@@ -364,16 +363,16 @@ alternation followed by uniform mutation & 0.5 \tabularnewline
 \end{tabular}
 \end{table}
 
-For our experiments we used PushGP \cite{spector:2002:GPEM, 1068292}, a stack-based genetic programming system.\footnote{Lexicase selection has also been shown to be effective in tree-based genetic programming \cite{Helmuth:2015:ieeeTEC, Krawiec:2015:GECCO:smgpWorkshop}.} PushGP supports a variety of control structures and multiple data types, making it a good choice for program synthesis tasks. The PushGP parameters used in these experiments are the same as those reported in \cite{Helmuth:2015:dissertation}; Table~\ref{table:parameters} presents the most relevant parameters. Note in particular that these runs use linear genomes that are later translated into Push programs, as described in \cite{Helmuth:2015:dissertation}. We use a variety of genetic operators on these linear genomes, including alternation, a linear crossover operator modeled after ULTRA \cite{Spector:2013:GPTP}; uniform mutation, which replaces each instruction with some probability; uniform close mutation, which probabilistically adds or removes parentheses; and alternation followed by uniform mutation.
+For our experiments we used PushGP \cite{spector:2002:GPEM, 1068292}, a stack-based genetic programming system.\footnote{Lexicase selection has also been shown to be effective in tree-based genetic programming \cite{Helmuth:2015:ieeeTEC, Krawiec:2015:GECCO:smgpWorkshop}.} PushGP supports a variety of control structures and multiple data types, making it a good choice for program synthesis tasks. The PushGP parameters used in these experiments are the same as those reported in \cite{Helmuth:2015:dissertation}; Table~\ref{table:parameters} presents the most relevant parameters. Note in particular that these runs use linear genomes that are translated into Push programs before execution, as described in \cite{Helmuth:2015:dissertation}. We use a variety of genetic operators on these linear genomes, including alternation, a linear crossover operator modeled after ULTRA \cite{Spector:2013:GPTP}; uniform mutation, which replaces each instruction with some probability; uniform close mutation, which probabilistically adds or removes parentheses; and alternation followed by uniform mutation.
 
 \begin{table*}[t]
 	\centering
 	\caption{
-		Average number of hyperselected individuals at the 1\%, 5\%, and 10\% levels per generation for lexicase selection, tournament selection and SLT selection.
+		Average number of hyperselected individuals per generation at the 1\%, 5\%, and 10\% levels for lexicase selection, tournament selection and SLT selection.
 	}
 	\label{table:slt-hyperselection}
 %	\rowcolors{3}{white}{light-gray}
-	\taburowcolors[3] 2{white .. light-gray}
+	\taburowcolors[3] 2{white .. Gray}
 	\begin{tabu} to \textwidth {l | rrr | rrr | rrr}
 		\toprule
 		& \multicolumn{3}{c|}{\textbf{Lexicase}} & \multicolumn{3}{c|}{\textbf{Tournament}} & \multicolumn{3}{c}{\textbf{SLT}} \\
@@ -399,7 +398,7 @@ For our experiments we used PushGP \cite{spector:2002:GPEM, 1068292}, a stack-ba
 	}
 	\label{table:lexicase-hyperselection-success}
 %	\rowcolors{3}{white}{light-gray}
-	\taburowcolors[3] 2{white .. light-gray}
+	\taburowcolors[3] 2{white .. Gray}
 	\begin{tabu} to \textwidth {l | rrr | rrr}
 		\toprule
 		& \multicolumn{3}{c|}{\textbf{Successful}} & \multicolumn{3}{c}{\textbf{Unsuccessful}} \\
@@ -468,7 +467,7 @@ In these runs, SLT usually had substantially lower hyperselection at the 1\% lev
 \centering
 \caption{Number of successful runs out of 100 for each parent selection method on each problem. For each problem, \underline{underline}~indicates significant improvement over tournament selection using a pairwise chi-squared test with Holm correction and 0.05 significance level. SLT and lexicase selection never have significantly different success rates.}
 \label{table:slt-results}
-\rowcolors{2}{light-gray}{white}
+\rowcolors{2}{Gray}{white}
 \begin{tabular}{lrrr}
 \toprule
 \textbf{Problem}                    & \textbf{Lex} & \textbf{Tourn} & \textbf{SLT} \\
