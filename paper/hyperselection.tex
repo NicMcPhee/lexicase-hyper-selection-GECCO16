@@ -394,7 +394,7 @@ For our experiments we used PushGP \cite{spector:2002:GPEM, 1068292}, a stack-ba
 \begin{table*}[t]
 	\centering
 	\caption{
-		Average number of hyperselected individuals at the 1\%, 5\%, and 10\% per generation for lexicase selection for five of the nine benchmark problems, broken out into successful and unsuccessful runs.
+		Average number of hyperselected individuals per generation at the 1\%, 5\%, and 10\% levels for lexicase selection on five of the nine benchmark problems, broken out into successful and unsuccessful runs.
 	}
 	\label{table:lexicase-hyperselection-success}
 %	\rowcolors{3}{white}{light-gray}
@@ -437,7 +437,7 @@ The results in Table~\ref{table:slt-hyperselection} clearly show that lexicase s
 Previous work and the results in Table~\ref{table:slt-results} show that genetic programming with lexicase selection significantly outperforms genetic programming with tournament selection across many benchmark problems, including most of those in Table~\ref{table:slt-hyperselection}. The fact that lexicase selection often concentrates selection pressure onto small numbers of individuals through hyperselection raises the question of whether there is a relationship between the rates of hyperselection in the lexicase runs and whether those runs are successful or not.
 
 Table~\ref{table:lexicase-hyperselection-success} shows the average number of hyperselected individuals for the lexicase runs of five of the nine benchmark problems,\footnote{These five benchmark problems were chosen % in~\cite{Helmuth:2015:GPTP}
-to represent a variety of success rates and problem types.} separated into the successful and unsuccessful runs. While there aren't major differences in the numbers at the 1\% level, the average number of hyperselected individuals at the 5\% and 10\% levels are often several times higher in the successful runs than in the unsuccessful runs. In the X-Word Lines problem, for example, the average number of hyperselections at the 5\% level for the successful runs was 0.47, over five times the rate for the unsuccessful runs (0.09), and the 10\% rate (0.22) was over 10 times the rate for the unsuccessful runs (0.02).
+to represent a variety of success rates and problem types.} separated into the successful and unsuccessful runs. While there are not major differences in the numbers at the 1\% level, the average number of hyperselected individuals at the 5\% and 10\% levels are often several times higher in the successful runs than in the unsuccessful runs. In the X-Word Lines problem, for example, the average number of hyperselections at the 5\% level for the successful runs was 0.47, over five times the rate for the unsuccessful runs (0.09), and the 10\% rate (0.22) was over 10 times the rate for the unsuccessful runs (0.02).
 
 This raises important questions: can we attribute lexicase selection's success to its ability to concentrate selection in hyperselection events? Or, is it more important that lexicase selects different individuals than tournament selection, in some sense the ``right'' individuals to drive evolution toward a solution? We investigate these questions in the following section.
 
