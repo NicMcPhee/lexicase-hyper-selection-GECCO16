@@ -332,11 +332,11 @@ On the other hand, we have observed numerous examples of lexicase selection rewa
 \end{table*}
 
 
-To empirically measure hyperselection, we gathered data from genetic programming runs using lexicase selection and tournament selection with size 7 tournaments. We tested each selection method on nine problems chosen from a recent general program synthesis benchmark suite~\cite{Helmuth:2015:GECCO}, a subset exhibiting a range of problem requirements and difficulties---see Table~\ref{table:problems} for details. These problems, taken from introductory computer science homework sets, mimic the types of programming expected of humans writing software.
+To empirically measure hyperselection, we gathered data from genetic programming runs using lexicase selection and tournament selection with size 7 tournaments. We tested each selection method on nine problems, exhibiting a range of problem requirements and difficulties, from a recent general program synthesis benchmark suite~\cite{Helmuth:2015:GECCO}---see Table~\ref{table:problems} for details. These problems, taken from introductory computer science homework sets, mimic the types of programming expected of humans writing software.
 
 \begin{table}[t]
 \centering
-\caption{The PushGP parameters used in our experiments.}
+\caption{PushGP parameters}
 \label{table:parameters}
 %\rowcolors{3}{Gray}{white}
 \begin{tabular}{l r}
@@ -366,7 +366,7 @@ For our experiments we used PushGP \cite{spector:2002:GPEM, 1068292}, a stack-ba
 \begin{table*}[t]
 	\centering
 	\caption{
-		The average number of hyperselected individuals at the 1\%, 5\%, and 10\% levels per generation for lexicase selection, tournament selection and SLT selection.
+		Average number of hyperselected individuals at the 1\%, 5\%, and 10\% levels per generation for lexicase selection, tournament selection and SLT selection.
 	}
 	\label{table:slt-hyperselection}
 %	\rowcolors{3}{white}{light-gray}
@@ -430,9 +430,9 @@ Considering that tournament selection conforms to the probability of selection g
 
 %\todo[inline]{We could probably get data on the question in the last sentence if we wanted to.\\Tom: We could get some data, but it's not clear to me how we would present it. We'd have to do something like fit a regression line to "number of ties vs. hyper selections". Anyway, it all sounds too complicated to show a point that's nowhere close to our main goals. So, I say leave it as-is.}
 
-The results in Table~\ref{table:slt-hyperselection} clearly show that lexicase selection gives more of its parent selections to single individuals than tournament selection, both at low levels (1\%) and higher levels (5\% and 10\%) of hyperselection. This indicates that lexicase selection more often concentrates its selection pressure on single individuals or small groups of individuals than tournament selection, increasing its exploitation of the individuals it selects most often. This data does not indicate whether lexicase selection is hyperselecting the same individuals that tournament selection ranks highest (those with best total error), or if it actually selects individuals that would receive few or no selections with tournament selection.
+The results in Table~\ref{table:slt-hyperselection} clearly show that lexicase selection gives more of its parent selections to single individuals than tournament selection, both at low levels (1\%) and higher levels (5\% and 10\%) of hyperselection. This indicates that lexicase selection more often concentrates its selection pressure on single individuals or small groups of individuals than tournament selection, increasing its exploitation of the individuals it selects most often. This data does not, however, indicate whether lexicase selection is hyperselecting the same individuals that tournament selection ranks highest (those with best total error), or if it actually selects individuals that would receive few or no selections with tournament selection.
 
-In Section~\ref{section:lexicase} we referenced results that show genetic programming with lexicase selection significantly outperforms genetic programming with tournament selection across many benchmark problems, including many of those in Table~\ref{table:slt-hyperselection}. We have now observed that lexicase selection often concentrates selection pressure into small numbers of individuals. This then raises the question of whether there is a relationship between the rates of hyperselection in the lexicase runs and whether those runs are successful or not.
+Previous work and the results in Table~\ref{table:slt-results} show that genetic programming with lexicase selection significantly outperforms genetic programming with tournament selection across many benchmark problems, including most of those in Table~\ref{table:slt-hyperselection}. The fact that lexicase selection often concentrates selection pressure onto small numbers of individuals through hyperselection raises the question of whether there is a relationship between the rates of hyperselection in the lexicase runs and whether those runs are successful or not.
 
 Table~\ref{table:lexicase-hyperselection-success} shows the average number of hyperselected individuals for the lexicase runs of five of the nine benchmark problems,\footnote{These five benchmark problems were chosen % in~\cite{Helmuth:2015:GPTP}
 to represent a variety of success rates and problem types.} separated into the successful and unsuccessful runs. While there aren't major differences in the numbers at the 1\% level, the average number of hyperselected individuals at the 5\% and 10\% levels are often several times higher in the successful runs than in the unsuccessful runs. In the X-Word Lines problem, for example, the average number of hyperselections at the 5\% level for the successful runs was 0.47, over five times the rate for the unsuccessful runs (0.09), and the 10\% rate (0.22) was over 10 times the rate for the unsuccessful runs (0.02).
