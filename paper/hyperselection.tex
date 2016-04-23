@@ -67,7 +67,7 @@
 \begin{document}
 
 % Copyright
-\setcopyright{acmcopyright}
+%\setcopyright{acmcopyright}
 %\setcopyright{acmlicensed}
 %\setcopyright{rightsretained}
 %\setcopyright{usgov}
@@ -75,24 +75,19 @@
 %\setcopyright{cagov}
 %\setcopyright{cagovmixed}
 
+\CopyrightYear{2016}
+\setcopyright{acmlicensed}
+\conferenceinfo{GECCO '16,}{July 20 - 24, 2016, Denver, CO, USA}
+\isbn{978-1-4503-4206-3/16/07}\acmPrice{\$15.00}
+\doi{http://dx.doi.org/10.1145/2908812.2908851}
 
-
-% DOI
-\doi{10.475/123_4}
-
-% ISBN
-\isbn{123-4567-24-567/08/06}
-
-
-
-\acmPrice{\$15.00}
 
 %
 % --- Author Metadata here ---
 %Conference
-\conferenceinfo{GECCO'16,} {July 20-24, 2016, Denver, Colorado, USA.}
-\CopyrightYear{2016}
-\crdata{TBA}
+%\conferenceinfo{GECCO'16,} {July 20-24, 2016, Denver, Colorado, USA.}
+%\CopyrightYear{2016}
+%\crdata{TBA}
 \clubpenalty=10000
 \widowpenalty = 10000
 % --- End of Author Metadata ---
@@ -169,7 +164,7 @@ Nicholas Freitag McPhee\\
 \maketitle
 \begin{abstract}
 
-Lexicase selection is a parent selection method that has been shown to improve the problem solving power of genetic programming over a range of problems. Previous work has shown that it can also produce \emph{hyperselection} events, in which a single individual is selected many more times than other individuals. Here we investigate the role that hyperselection plays in the problem-solving performance of lexicase selection. We run genetic programming on a set of software synthesis benchmark problems using lexicase and tournament selection, confirming that hyperselection occurs significantly more often and more drastically with lexicase selection, which also performs significantly better. We then show results from an experiment indicating that hyperselection is not integral to the problem-solving performance or diversity maintenance previously observed when using lexicase selection. We conclude that the power of lexicase selection stems from the collection of individuals that it selects, not from the unusual frequencies with which it sometimes selects them.
+Lexicase selection is a parent selection method that has been shown to improve the problem solving power of genetic programming over a range of problems. Previous work has shown that it can also produce \emph{hyperselection} events, in which a single individual is selected many more times than other individuals. Here we investigate the role that hyperselection plays in the problem-solving performance of lexicase selection. We run genetic programming on a set of program synthesis benchmark problems using lexicase and tournament selection, confirming that hyperselection occurs significantly more often and more drastically with lexicase selection, which also performs significantly better. We then show results from an experiment indicating that hyperselection is not integral to the problem-solving performance or diversity maintenance observed when using lexicase selection. We conclude that the power of lexicase selection stems from the collection of individuals that it selects, not from the unusual frequencies with which it sometimes selects them.
 
 % We then introduce a new \emph{sampled lexicase-tournament selection} method, which chooses individuals using tournament selection based on a fitness calculated by how often each individual would be selected using lexicase selection. If hyperselection is responsible for the problem-solving performance of lexicase selection, then sampled lexicase-tournament selection should not perform as well as lexicase selection. Additional runs show that sampled lexicase-tournament selection does perform comparably to lexicase selection. 
 
@@ -211,27 +206,27 @@ Lexicase selection is a parent selection method that has been shown to improve t
 % We no longer use \terms command
 %\terms{Theory}
 
-\keywords{lexicase selection; tournament selection; hyperselection; software synthesis}
+\keywords{lexicase selection; tournament selection; hyperselection; program synthesis}
 
 \section{Introduction}
 \label{section:introduction}
 
-Evolutionary computation systems use selection of individuals to direct search, with the goal of refining and recombining promising programs to produce better ones. Selection can be applied at various stages of the evolutionary algorithm, but in genetic programming it is generally applied only when choosing parents. That is, a \emph{parent selection} method chooses individuals from which offspring will be generated, typically by recombination and mutation. Different parent selection methods will select parents with different frequencies, directing the search in different ways.
+Evolutionary computation systems direct search through the selection of individuals, with the goal of refining and recombining promising programs to produce better ones. Selection can be applied at various stages of the evolutionary algorithm, but in genetic programming it is generally applied only when choosing parents. That is, a \emph{parent selection} method chooses the individuals to vary to generate offspring, typically through recombination and mutation. Different parent selection methods will select parents with different frequencies, directing the search in different ways.
 
-For problems involving multiple test cases, most parent selection methods select on the basis of aggregate performance across all test cases. For example, when tournament selection is applied to such problems, one first calculates the fitness of each individual as the total or average error across all test cases. Then, one conducts tournaments in which the program with the best fitness wins and is selected as a parent.
+For problems involving multiple test cases, most parent selection methods select on the basis of aggregate performance across all test cases. For example, when using tournament selection, one first calculates the fitness of each individual as the total or average error across all test cases. Then, one conducts tournaments in which the program with the best fitness wins and is selected as a parent.
 
 Lexicase selection chooses parents based not on aggregate performance across all test cases, but instead on performance on individual test cases, considered one at a time in random order. Lexicase selection shares some characteristics with other behavior-based selection mechanisms that consider test cases individually instead of in aggregate~\cite{Krawiec:2015:GPTP, Krawiec:2015:GECCO:smgpWorkshop}. It differs from these other methods in the way in which it emphasizes different combinations of test cases in each selection. The lexicase selection algorithm is described in detail in Section~\ref{section:lexicase}.
 
-In previous work, lexicase selection has been shown to significantly enhance the problem-solving power of genetic programming compared to standard tournament selection, and to tournament selection with implicit fitness sharing~\cite{McKay:2000:GECCO}, where the aggregate measure is weighted by case difficulty. For example, it has been shown that lexicase selection can significantly enhance the ability of genetic programming to find terms in finite algebras, to design digital multipliers, to produce programs that replicate the {\ttfamily wc} command, and to perform symbolic regression of the factorial function~\cite{Helmuth:2015:ieeeTEC}.
-In other work it was shown to significantly enhance the ability of genetic programming to solve the problems in a software synthesis benchmark suite~\cite{Helmuth:2015:GECCO, Helmuth:2015:dissertation}.
+In previous work, lexicase selection has been shown to significantly enhance the problem-solving power of genetic programming compared to standard tournament selection, and to tournament selection with implicit fitness sharing~\cite{McKay:2000:GECCO}, where the aggregate measure is weighted by case difficulty. For example, it has improved performance when finding terms in finite algebras, designing digital multipliers, producing programs that replicate the {\ttfamily wc} command, and performing symbolic regression of the factorial function~\cite{Helmuth:2015:ieeeTEC}.
+In other work it was shown to significantly enhance the ability of genetic programming to solve the problems in a general program synthesis benchmark suite~\cite{Helmuth:2015:GECCO, Helmuth:2015:dissertation}.
 
 Subsequent investigations have focussed on why lexicase selection often enhances problem-solving performance, with an eye toward refinement of the method or the development of more powerful methods. For example, studies of population diversity under lexicase selection have shown that it tends to produce and maintain significantly more diverse populations than those produced by tournament selection with or without implicit fitness sharing~\cite{Helmuth:2015:GPTP}. Another study showed that it tends to produce and propagate specialist individuals that do well on some cases but poorly on others~\cite{Helmuth:2015:dissertation}.
 
-The study described in the present paper stems from an observation that when lexicase selection is used, single individuals are sometimes exploited aggressively in the production of the next generation, being chosen in an exceptionally large number of parent selection events. This was discovered in part through studies in which graph databases were used to visualize the ancestries of evolved solution programs~\cite{McPhee:2015:GPTP}. We use the term \textit{hyperselection} to describe events in which a single individual is selected in a large percent of the parent selections in a generation. Anecdotally, cases have been observed in which a single individual is selected in over $90\%$ of the parent selection events in a single generation. In some cases, individuals that are hyperselected have relatively poor total error, but they nonetheless give rise to progeny that evolve to solve the target problem. These observations struck us as remarkable, in part because the level of hyperselection that we see with lexicase selection is not even possible with many of the more commonly used selection methods, such as tournament selection.
+The study described in the present paper stems from an observation that when lexicase selection is used, single individuals are sometimes exploited aggressively in the production of the next generation, being chosen in an exceptionally large number of parent selection events. This was discovered in part through studies in which graph databases were used to visualize the ancestries of evolved solution programs~\cite{McPhee:2015:GPTP}. We use the term \textit{hyperselection} to describe events in which a single individual is selected in a large percent of the parent selections in a generation. Anecdotally, we have observed cases in which a single individual is selected in over $90\%$ of the parent selection events in a single generation, and have often observed a parent making up 5\% or 10\% of the selections. In some cases, individuals that are hyperselected have relatively poor total error, but they nonetheless give rise to progeny that evolve to solve the target problem. These observations strike us as remarkable, in part because the level of hyperselection that we see with lexicase selection is not even possible with many of the more commonly used selection methods, such as tournament selection.
 
-Our observations of hyperselection events when using lexicase selection led us to hypothesize that hyperselection may be partly responsible for the problem-solving power of lexicase selection, as opposed to simply being a side effect. To test this hypothesis, we introduce a new \emph{sampled lexicase-tournament selection} method, which chooses individuals from a pool produced by lexicase selection, but with frequencies similar to those of tournament selection. If hyperselection is responsible for the problem-solving performance of lexicase selection, then sampled lexicase-tournament selection should not perform as well as lexicase selection since it has similar hyperselection characteristics to tournament selection. But the results that we present show that sampled lexicase-tournament selection does indeed perform comparably to lexicase selection, leading us to conclude that hyperselection does not play a large role in lexicase selection's success.
+Our observations of hyperselection events when using lexicase selection led us to hypothesize that hyperselection may be partly responsible for the problem-solving power of lexicase selection, as opposed to simply being a side effect. To test this hypothesis, we introduce a new \emph{sampled lexicase-tournament selection} method, which chooses individuals from a pool produced by lexicase selection but with frequencies similar to those of tournament selection. If hyperselection is responsible for the problem-solving performance of lexicase selection, then sampled lexicase-tournament selection should not perform as well as lexicase selection since it has similar hyperselection characteristics to tournament selection. However, the results that we present show that sampled lexicase-tournament selection does indeed perform comparably to lexicase selection, leading us to conclude that hyperselection does not play a large role in lexicase selection's success.
 
-In the following section, we  describe the lexicase selection algorithm. In Section~\ref{section:hyperselection}, we formally define hyperselection and discuss the selection frequency profile of standard tournament selection, in which hyperselection should be rare. Our results in Section~\ref{section:experiments} confirm that high levels of hyperselection are only present when using lexicase selection, and not with tournament selection. We then investigate the role that hyperselection plays in the problem-solving performance of lexicase selection. Section~\ref{section:HyperSelectionandLexicasePerformance} presents our experiments with sampled lexicase-tournament selection. In Section~\ref{section:conclusions} we draw the conclusion that the power of lexicase selection stems from the collection of individuals that it tends to select, not from the unusual frequencies with which it sometimes selects them.
+In the following section, we  describe the lexicase selection algorithm. In Section~\ref{section:hyperselection}, we formally define hyperselection and discuss the selection frequency profile of standard tournament selection, in which hyperselection should be rare. Our results in Section~\ref{section:experiments} confirm that high levels of hyperselection are only present when using lexicase selection, and not with tournament selection. We then investigate the role that hyperselection plays in the problem-solving performance of lexicase selection. Section~\ref{section:HyperSelectionandLexicasePerformance} presents our experiments with sampled lexicase-tournament selection. We conclude that the power of lexicase selection stems from the collection of individuals that it tends to select, not from the unusual frequencies with which it sometimes selects them.
 
 
 \section{Lexicase Selection}
@@ -331,7 +326,7 @@ On the other hand, we have observed numerous examples of lexicase selection rewa
 \end{table*}
 
 
-To empirically measure hyperselection, we gathered data from genetic programming runs using lexicase selection and tournament selection with size 7 tournaments. We tested each selection method on nine problems, exhibiting a range of problem requirements and difficulties, from a recent general program synthesis benchmark suite~\cite{Helmuth:2015:GECCO}; see Table~\ref{table:problems} for details. These problems, taken from introductory computer science homework sets, mimic the types of programming expected of humans writing software.
+To empirically measure hyperselection, we gathered data from genetic programming runs using lexicase selection and tournament selection with size 7 tournaments. We tested each selection method on nine problems, exhibiting a range of problem requirements and difficulties, from a recent general program synthesis benchmark suite~\cite{Helmuth:2015:GECCO}; see Table~\ref{table:problems} for details. These problems, taken from introductory computer science homework sets, mimic the types of programming expected of humans writing software. On each problem, we use a training data set during evolution and an unseen test set to test generalization, following the methods described in the benchmark suite~\cite{Helmuth:2015:GECCO}. A program must pass both the training and test sets to be considered a solution.
 
 \begin{table}[t]
 \centering
@@ -433,8 +428,8 @@ The results in Table~\ref{table:slt-hyperselection} clearly show that lexicase s
 
 Previous work and the results in Table~\ref{table:slt-results} show that genetic programming with lexicase selection significantly outperforms genetic programming with tournament selection across many benchmark problems, including most of those in Table~\ref{table:slt-hyperselection}. The fact that lexicase selection often concentrates selection pressure onto small numbers of individuals through hyperselection raises the question of whether there is a relationship between the rates of hyperselection in the lexicase runs and whether those runs are successful or not.
 
-Table~\ref{table:lexicase-hyperselection-success} shows the average number of hyperselected individuals for the lexicase runs of five of the nine benchmark problems,\footnote{These five benchmark problems were chosen % in~\cite{Helmuth:2015:GPTP}
-to represent a variety of success rates and problem types.} separated into the successful and unsuccessful runs. While there are not major differences in the numbers at the 1\% level, the average number of hyperselected individuals at the 5\% and 10\% levels are often several times higher in the successful runs than in the unsuccessful runs. In the X-Word Lines problem, for example, the average number of hyperselections at the 5\% level for the successful runs was 0.47, over five times the rate for the unsuccessful runs (0.09), and the 10\% rate (0.22) was over 10 times the rate for the unsuccessful runs (0.02).
+Table~\ref{table:lexicase-hyperselection-success} shows the average number of hyperselected individuals for the lexicase runs of five of the nine benchmark problems, separated into the successful and unsuccessful runs.\footnote{We do not have success/failure split data for the other 4 problems, since they were conducted before we considered splitting the data. Since this result is not a major contribution of this work, we did not rerun this experiment.}
+While there are not major differences in the numbers at the 1\% level, the average number of hyperselected individuals at the 5\% and 10\% levels are often several times higher in the successful runs than in the unsuccessful runs. In the X-Word Lines problem, for example, the average number of hyperselections at the 5\% level for the successful runs was 0.47, over five times the rate for the unsuccessful runs (0.09), and the 10\% rate (0.22) was over 10 times the rate for the unsuccessful runs (0.02).
 
 This raises important questions: can we attribute lexicase selection's success to its ability to concentrate selection in hyperselection events? Or, is it more important that lexicase selects different individuals than tournament selection, in some sense the ``right'' individuals to drive evolution toward a solution? We investigate these questions in the following section.
 
@@ -533,6 +528,7 @@ One avenue for future research is to investigate the notion of a ``specialist'' 
 
 Our anecdotal exploration of quick diversity increases following major drops in diversity when using lexicase selection suggests another area for future work. A more thorough exploration of diversity recovery, including statistical analysis, could lend understanding to the causes of lexicase selection's ability to maintain high levels of population diversity. A comparison to other techniques' abilities to recover from diversity drops is also intriguing.
 
+While this work's focus is on the effects of hyperselection on lexicase selection, it may have a role in other selection methods we did not explore here. While tournament-based methods such as implicit fitness sharing~\cite{McKay:2000:GECCO} should roughly mirror the hyperselection characteristics of tournament selection, other methods such as fitness-proportionate selection or Pareto-based techniques may have different hyperselection characteristics that could be worth exploring.
 
 
 %ACKNOWLEDGMENTS are optional
